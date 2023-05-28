@@ -12,3 +12,4 @@ export const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 export const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME;
 export const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY;
 export const CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET;
+export const DOMAIN = process.env.DOMAIN;
