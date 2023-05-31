@@ -3,9 +3,9 @@ export const swaggerOptions = {
     definition:{
         openapi:'3.0.0',
         info:{
-          title:'API REST Comedor EPN',
+          title:'Backend Congreso',
           version:'1.0.0',
-          description:'API REST que sirve los enpoint necesarios para el funcionamiento del comedor EPN'
+          description:'API REST que sirve los enpoint necesarios para el funcionamiento del congreso'
         },
         servers:[
           {
