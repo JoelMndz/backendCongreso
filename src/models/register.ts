@@ -7,20 +7,23 @@ const registerSchema = new Schema({
   },
   status:{
     type: String,
-    enum: ['paid','pending','reject']
+    enum: ['paid','pending','reject'],
+    default: 'pending'
   },
   inscriptions: [
     {
-        _id: Schema.Types.ObjectId,
-        attendanceDate:{
-            type: Date,
-            default: null
-        },
-        certificateURL: {
-            type: String,
-            default: null
-        },
-
+      attendanceDate:{
+          type: Date,
+          default: null
+      },
+      certificateURL: {
+          type: String,
+          default: null
+      },
+      courseId: {
+        type: Schema.Types.ObjectId,
+        ref: 'courses'
+      }
     }
   ],
   userId:{
@@ -29,7 +32,10 @@ const registerSchema = new Schema({
   },
   qr: String,
   total: Number,
-  createdAt: Date,
+  createdAt: {
+    type: Date,
+    default: Date.now()
+  },
   voucherURL: String,
 });
 

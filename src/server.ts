@@ -7,6 +7,7 @@ import swaggerDoc from 'swagger-jsdoc'
 import { swaggerOptions } from './docs'
 import { DOMAIN, PORT} from './config'
 import { connectMongoDB } from './database'
+import { RouterUser } from './routes/user'
 
 export class Server{
     private app;
@@ -22,7 +23,7 @@ export class Server{
     private configuration(){
         this.app.set('port', PORT);
         const spec = swaggerDoc(swaggerOptions);
-        this.app.use('/',swaggerExpress.serve, swaggerExpress.setup(spec));
+        this.app.use('/docs',swaggerExpress.serve, swaggerExpress.setup(spec));
     }
 
     private middlewares(){
@@ -32,7 +33,7 @@ export class Server{
     }
 
     private routes(){
-
+        this.app.use('/api/user', RouterUser);
     }
 
     public listen(){
