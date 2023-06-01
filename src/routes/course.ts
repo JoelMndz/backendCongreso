@@ -6,91 +6,95 @@ export const RouterCourse = Router();
 RouterCourse.post('/crete-course', CourseController.createCourse);
 
 /**
+ * /**
  * @swagger
  * components:
- *  schemas:
- *   RequestCreateCourse:
- *    type: object
- *    properties:
- *     title:
- *       type: string
- *     description:
- *       type: string
- *     photoBase64:
- *       type: string
- *     price:
- *       type: number
- *     type:
- *       type: string
- *       enum: ['workshop', 'congress']
- *     startDate:
- *       type: string
- *       format: date-time
- *     endDate:
- *       type: string
- *       format: date-time
- *   required:
- *   - title
- *   - description
- *   - photoBase64
- *   - price
- *   - type
- *   - startDate
- *   - endDate
- *   example:
- *    title: Curso de React
- *    description: Curso de React para principiantes
- *    photoBase64: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA...
- *    price: 100
- *    type: workshop
- *    startDate: "2021-05-01T00:00:00.000Z"
- *    endDate: "2021-05-01T00:00:00.000Z"
+ *   schemas:
+ *     RequestCreateCourse:
+ *       type: object
+ *       properties:
+ *         title:
+ *           type: string
+ *         description:
+ *           type: string
+ *         photoBase64:
+ *           type: string
+ *         price:
+ *           type: number
+ *         type:
+ *           type: string
+ *           enum: ['workshop', 'congress']
+ *         startDate:
+ *           type: string
+ *           format: date-time
+ *         endDate:
+ *           type: string
+ *           format: date-time
+ *         certificateTemplateBase64: 
+ *           type: string
+ *       required:
+ *         - title
+ *         - description
+ *         - photoBase64
+ *         - price
+ *         - type
+ *         - startDate
+ *         - endDate
+ *       example:
+ *         title: Curso de React
+ *         description: Curso de React para principiantes
+ *         photoBase64: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA...
+ *         price: 100
+ *         type: workshop
+ *         startDate: "2021-05-01T00:00:00.000Z"
+ *         endDate: "2021-05-01T00:00:00.000Z"
+ *         certificateTemplateBase64: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA...
  *    
- *   Error:
- *    type: object
- *    properties:
- *     message:
- *       type: string
- *     status:
- *       type: number
- *     example:
- *      message: 'Curso registrado!'
- *      errors: []
- *      status: 400
+ *     Error:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *         status:
+ *           type: number
+ *         example:
+ *           message: 'Curso registrado!'
+ *           errors: []
+ *           status: 400
  */
 
 /**
  * @swagger
  * tags:
- *   name: Course
- *   description: Endpoints para el manejo de cursos
+ *   - name: Course
+ *     description: Endpoints para el manejo de cursos
  */
 
 /**
  * @swagger
  * /api/course/create-course:
- *  post:
- *    summary: Crear un curso
- *    tags: [Course]
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/RequestCreateCourse'
- *    responses:
- *      200:
- *        description: Crear un curso
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/RequestCreateCourse'
- *      400:
- *        description: Devuelve un objeto de tipo Error
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/Error'
+ *   post:
+ *     summary: Crear un curso
+ *     tags: [Course]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RequestCreateCourse'
+ *     responses:
+ *       '200':
+ *         description: Crear un curso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RequestCreateCourse'
+ *       '400':
+ *         description: Devuelve un objeto de tipo Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 
 RouterCourse.get('/get-courses', CourseController.getAllCourses);
@@ -119,10 +123,12 @@ RouterCourse.get('/get-courses', CourseController.getAllCourses);
  *         endDate:
  *           type: string
  *           format: date-time
+ *         certificateTemplateBase64: 
+ *           type: string
  *       required:
  *         - title
  *         - description
- *         - photoURL
+ *         - photoBase64
  *         - price
  *         - type
  *         - startDate
@@ -135,6 +141,7 @@ RouterCourse.get('/get-courses', CourseController.getAllCourses);
  *         type: workshop
  *         startDate: "2021-05-01T00:00:00.000Z"
  *         endDate: "2021-05-01T00:00:00.000Z"
+ *         certificateTemplateBase64: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA...
  * 
  *     Error:
  *       type: object
@@ -152,8 +159,8 @@ RouterCourse.get('/get-courses', CourseController.getAllCourses);
 /**
  * @swagger
  * tags:
- *   name: Course
- *   description: Endpoints para el manejo de cursos
+ *   - name: Course
+ *     description: Endpoints para el manejo de cursos
  */
 
 /**
@@ -161,15 +168,16 @@ RouterCourse.get('/get-courses', CourseController.getAllCourses);
  * /api/course/get-courses:
  *   get:
  *     summary: Obtener todos los cursos
- *     tags: [Course]
+ *     tags:
+ *       - Course
  *     responses:
- *       200:
+ *       '200':
  *         description: Devuelve todos los cursos
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/RequestGetAllCourses'
- *       400:
+ *       '400':
  *         description: Devuelve un objeto de tipo Error
  *         content:
  *           application/json:
@@ -208,8 +216,8 @@ RouterCourse.get('/get-course/:id', CourseController.getCourseById);
 /**
  * @swagger
  * tags:
- *   name: Course
- *   description: Endpoints para el manejo de cursos
+ *   - name: Course
+ *     description: Endpoints para el manejo de cursos
  */
 
 /**
@@ -217,7 +225,8 @@ RouterCourse.get('/get-course/:id', CourseController.getCourseById);
  * /api/course/get-course/{id}:
  *   get:
  *     summary: Obtener un curso por id
- *     tags: [Course]
+ *     tags:
+ *       - Course
  *     parameters:
  *       - name: id
  *         in: path
@@ -226,13 +235,13 @@ RouterCourse.get('/get-course/:id', CourseController.getCourseById);
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: Devuelve el curso con el id ingresado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/RequestGetCourseById'
- *       400:
+ *       '400':
  *         description: Devuelve un objeto de tipo Error
  *         content:
  *           application/json:
@@ -241,6 +250,7 @@ RouterCourse.get('/get-course/:id', CourseController.getCourseById);
  */
 
 RouterCourse.put('/update-course/:id', CourseController.updateCourse);
+
 /**
  * @swagger
  * components:
@@ -252,7 +262,7 @@ RouterCourse.put('/update-course/:id', CourseController.updateCourse);
  *           type: string
  *         description:
  *           type: string
- *        photoBase64:
+ *         photoBase64:
  *           type: string
  *         price:
  *           type: number
@@ -265,6 +275,8 @@ RouterCourse.put('/update-course/:id', CourseController.updateCourse);
  *         endDate:
  *           type: string
  *           format: date-time
+ *         certificateTemplateBase64:
+ *           type: string
  *       required:
  *         - title
  *         - description
@@ -281,6 +293,7 @@ RouterCourse.put('/update-course/:id', CourseController.updateCourse);
  *         type: workshop
  *         startDate: "2021-05-01T00:00:00.000Z"
  *         endDate: "2021-05-01T00:00:00.000Z"
+ *         certificateTemplateBase64: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA...
  * 
  *     Error:
  *       type: object
@@ -298,8 +311,8 @@ RouterCourse.put('/update-course/:id', CourseController.updateCourse);
 /**
  * @swagger
  * tags:
- *   name: Course
- *   description: Endpoints para el manejo de cursos
+ *   - name: Course
+ *     description: Endpoints para el manejo de cursos
  */
 
 /**
@@ -307,7 +320,8 @@ RouterCourse.put('/update-course/:id', CourseController.updateCourse);
  * /api/course/update-course/{id}:
  *   put:
  *     summary: Actualizar un curso por id
- *     tags: [Course]
+ *     tags:
+ *       - Course
  *     parameters:
  *       - name: id
  *         in: path
@@ -322,13 +336,13 @@ RouterCourse.put('/update-course/:id', CourseController.updateCourse);
  *           schema:
  *             $ref: '#/components/schemas/RequestUpdateCourse'
  *     responses:
- *       200:
+ *       '200':
  *         description: Devuelve el curso con el id ingresado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/RequestUpdateCourse'
- *       400:
+ *       '400':
  *         description: Devuelve un objeto de tipo Error
  *         content:
  *           application/json:
@@ -367,8 +381,8 @@ RouterCourse.delete('/delete-course/:id', CourseController.deleteCourse);
 /**
  * @swagger
  * tags:
- *   name: Course
- *   description: Endpoints para el manejo de cursos
+ *   - name: Course
+ *     description: Endpoints para el manejo de cursos
  */
 
 /**
@@ -376,7 +390,8 @@ RouterCourse.delete('/delete-course/:id', CourseController.deleteCourse);
  * /api/course/delete-course/{id}:
  *   delete:
  *     summary: Eliminar un curso por id
- *     tags: [Course]
+ *     tags:
+ *       - Course
  *     parameters:
  *       - name: id
  *         in: path
@@ -385,13 +400,13 @@ RouterCourse.delete('/delete-course/:id', CourseController.deleteCourse);
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: Devuelve el curso con el id ingresado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/RequestDeleteCourse'
- *       400:
+ *       '400':
  *         description: Devuelve un objeto de tipo Error
  *         content:
  *           application/json:
