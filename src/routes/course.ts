@@ -3,7 +3,7 @@ import { CourseController } from "../controllers";
 
 export const RouterCourse = Router();
 
-RouterCourse.get("/crear-curso", CourseController.createCourse);
+RouterCourse.get("/crete-course", CourseController.createCourse);
 
 /**
  * @swagger
@@ -66,16 +66,16 @@ RouterCourse.get("/crear-curso", CourseController.createCourse);
 /**
  * @swagger
  * tags:
- *   name: Curso
+ *   name: Course
  *   description: Endpoints para el manejo de cursos
  */
 
 /**
  * @swagger
- * /api/course/crear-curso:
+ * /api/course/create-course:
  *  post:
  *    summary: Crear un curso
- *    tags: [Curso]
+ *    tags: [Course]
  *    requestBody:
  *      required: true
  *      content:
@@ -97,7 +97,7 @@ RouterCourse.get("/crear-curso", CourseController.createCourse);
  *              $ref: '#/components/schemas/Error'
  */
 
-RouterCourse.get("/obtener-cursos", CourseController.getAllCourses);
+RouterCourse.get("/get-courses", CourseController.getAllCourses);
 
 /**
  * @swagger
@@ -160,16 +160,16 @@ RouterCourse.get("/obtener-cursos", CourseController.getAllCourses);
 /**
  * @swagger
  * tags:
- *   name: Curso
+ *   name: Course
  *   description: Endpoints para el manejo de cursos
  */
 
 /**
  * @swagger
- * /api/course/obtener-cursos:
+ * /api/course/get-courses:
  *   get:
  *     summary: Obtener todos los cursos
- *     tags: [Curso]
+ *     tags: [Course]
  *     responses:
  *       200:
  *         description: Devuelve todos los cursos
@@ -185,7 +185,7 @@ RouterCourse.get("/obtener-cursos", CourseController.getAllCourses);
  *               $ref: '#/components/schemas/Error'
  */
 
-RouterCourse.get("/obtener-curso/:id", CourseController.getCourseById);
+RouterCourse.get("/get-course/:id", CourseController.getCourseById);
 /**
  * @swagger
  * components:
@@ -216,16 +216,16 @@ RouterCourse.get("/obtener-curso/:id", CourseController.getCourseById);
 /**
  * @swagger
  * tags:
- *   name: Curso
+ *   name: Course
  *   description: Endpoints para el manejo de cursos
  */
 
 /**
  * @swagger
- * /api/course/obtener-curso/{id}:
+ * /api/course/get-course/{id}:
  *   get:
  *     summary: Obtener un curso por id
- *     tags: [Curso]
+ *     tags: [Course]
  *     parameters:
  *       - name: id
  *         in: path
@@ -248,7 +248,7 @@ RouterCourse.get("/obtener-curso/:id", CourseController.getCourseById);
  *               $ref: '#/components/schemas/Error'
  */
 
-RouterCourse.put("/actualizar-curso/:id", CourseController.updateCourse);
+RouterCourse.put("/update-course/:id", CourseController.updateCourse);
 /**
  * @swagger
  * components:
@@ -310,16 +310,16 @@ RouterCourse.put("/actualizar-curso/:id", CourseController.updateCourse);
 /**
  * @swagger
  * tags:
- *   name: Curso
+ *   name: Course
  *   description: Endpoints para el manejo de cursos
  */
 
 /**
  * @swagger
- * /api/course/actualizar-curso/{id}:
+ * /api/course/update-course/{id}:
  *   put:
  *     summary: Actualizar un curso por id
- *     tags: [Curso]
+ *     tags: [Course]
  *     parameters:
  *       - name: id
  *         in: path
@@ -348,7 +348,7 @@ RouterCourse.put("/actualizar-curso/:id", CourseController.updateCourse);
  *               $ref: '#/components/schemas/Error'
  */
 
-RouterCourse.delete("/eliminar-curso/:id", CourseController.deleteCourse);
+RouterCourse.delete("/delete-course/:id", CourseController.deleteCourse);
 /**
  * @swagger
  * components:
@@ -379,16 +379,16 @@ RouterCourse.delete("/eliminar-curso/:id", CourseController.deleteCourse);
 /**
  * @swagger
  * tags:
- *   name: Curso
+ *   name: Course
  *   description: Endpoints para el manejo de cursos
  */
 
 /**
  * @swagger
- * /api/course/eliminar-curso/{id}:
+ * /api/course/delete-course/{id}:
  *   delete:
  *     summary: Eliminar un curso por id
- *     tags: [Curso]
+ *     tags: [Course]
  *     parameters:
  *       - name: id
  *         in: path
