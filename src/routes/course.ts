@@ -3,7 +3,7 @@ import { CourseController } from "../controllers";
 
 export const RouterCourse = Router();
 
-RouterCourse.get("/crete-course", CourseController.createCourse);
+RouterCourse.post('/crete-course', CourseController.createCourse);
 
 /**
  * @swagger
@@ -16,7 +16,7 @@ RouterCourse.get("/crete-course", CourseController.createCourse);
  *       type: string
  *     description:
  *       type: string
- *     photoURL:
+ *     photoBase64:
  *       type: string
  *     price:
  *       type: number
@@ -29,26 +29,22 @@ RouterCourse.get("/crete-course", CourseController.createCourse);
  *     endDate:
  *       type: string
  *       format: date-time
- *     certificateTemplateURL:
- *       type: string
  *   required:
  *   - title
  *   - description
- *   - photoURL
+ *   - photoBase64
  *   - price
  *   - type
  *   - startDate
  *   - endDate
- *   - certificateTemplateURL
  *   example:
  *    title: Curso de React
  *    description: Curso de React para principiantes
- *    photoURL: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.campusmvp.es%2Frecursos%2Fpost%2Fc"
+ *    photoBase64: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA...
  *    price: 100
  *    type: workshop
  *    startDate: "2021-05-01T00:00:00.000Z"
  *    endDate: "2021-05-01T00:00:00.000Z"
- *    certificateTemplateURL: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.campusmvp.es%2Frecursos%2Fpost%2Fc"
  *    
  *   Error:
  *    type: object
@@ -84,7 +80,7 @@ RouterCourse.get("/crete-course", CourseController.createCourse);
  *            $ref: '#/components/schemas/RequestCreateCourse'
  *    responses:
  *      200:
- *        description: Devuelve el curso ingresado con el id
+ *        description: Crear un curso
  *        content:
  *          application/json:
  *            schema:
@@ -97,7 +93,7 @@ RouterCourse.get("/crete-course", CourseController.createCourse);
  *              $ref: '#/components/schemas/Error'
  */
 
-RouterCourse.get("/get-courses", CourseController.getAllCourses);
+RouterCourse.get('/get-courses', CourseController.getAllCourses);
 
 /**
  * @swagger
@@ -110,7 +106,7 @@ RouterCourse.get("/get-courses", CourseController.getAllCourses);
  *           type: string
  *         description:
  *           type: string
- *         photoURL:
+ *         photoBase64:
  *           type: string
  *         price:
  *           type: number
@@ -123,8 +119,6 @@ RouterCourse.get("/get-courses", CourseController.getAllCourses);
  *         endDate:
  *           type: string
  *           format: date-time
- *         certificateTemplateURL:
- *           type: string
  *       required:
  *         - title
  *         - description
@@ -133,16 +127,14 @@ RouterCourse.get("/get-courses", CourseController.getAllCourses);
  *         - type
  *         - startDate
  *         - endDate
- *         - certificateTemplateURL
  *       example:
  *         title: Curso de React
  *         description: Curso de React para principiantes
- *         photoURL: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.campusmvp.es%2Frecursos%2Fpost%2Fc"
+ *         photoBase64: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA...
  *         price: 100
  *         type: workshop
  *         startDate: "2021-05-01T00:00:00.000Z"
  *         endDate: "2021-05-01T00:00:00.000Z"
- *         certificateTemplateURL: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.campusmvp.es%2Frecursos%2Fpost%2Fc"
  * 
  *     Error:
  *       type: object
@@ -185,7 +177,7 @@ RouterCourse.get("/get-courses", CourseController.getAllCourses);
  *               $ref: '#/components/schemas/Error'
  */
 
-RouterCourse.get("/get-course/:id", CourseController.getCourseById);
+RouterCourse.get('/get-course/:id', CourseController.getCourseById);
 /**
  * @swagger
  * components:
@@ -248,7 +240,7 @@ RouterCourse.get("/get-course/:id", CourseController.getCourseById);
  *               $ref: '#/components/schemas/Error'
  */
 
-RouterCourse.put("/update-course/:id", CourseController.updateCourse);
+RouterCourse.put('/update-course/:id', CourseController.updateCourse);
 /**
  * @swagger
  * components:
@@ -260,7 +252,7 @@ RouterCourse.put("/update-course/:id", CourseController.updateCourse);
  *           type: string
  *         description:
  *           type: string
- *         photoURL:
+ *        photoBase64:
  *           type: string
  *         price:
  *           type: number
@@ -273,26 +265,22 @@ RouterCourse.put("/update-course/:id", CourseController.updateCourse);
  *         endDate:
  *           type: string
  *           format: date-time
- *         certificateTemplateURL:
- *           type: string
  *       required:
  *         - title
  *         - description
- *         - photoURL
+ *         - photoBase64
  *         - price
  *         - type
  *         - startDate
  *         - endDate
- *         - certificateTemplateURL
  *       example:
  *         title: Curso de React
  *         description: Curso de React para principiantes
- *         photoURL: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.campusmvp.es%2Frecursos%2Fpost%2Fc"
+ *         photoBase64: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA...
  *         price: 100
  *         type: workshop
  *         startDate: "2021-05-01T00:00:00.000Z"
  *         endDate: "2021-05-01T00:00:00.000Z"
- *         certificateTemplateURL: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.campusmvp.es%2Frecursos%2Fpost%2Fc"
  * 
  *     Error:
  *       type: object
@@ -348,7 +336,7 @@ RouterCourse.put("/update-course/:id", CourseController.updateCourse);
  *               $ref: '#/components/schemas/Error'
  */
 
-RouterCourse.delete("/delete-course/:id", CourseController.deleteCourse);
+RouterCourse.delete('/delete-course/:id', CourseController.deleteCourse);
 /**
  * @swagger
  * components:
