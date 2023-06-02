@@ -19,7 +19,10 @@ export const CourseService = {
       throw new Error(error.message);
     }
     const photoURL = await uploadCloudinary(entity.photoBase64);
-    const certificateTemplateURL = await uploadCloudinary (entity.certificateTemplateBase64);
+    let certificateTemplateURL = null;
+    if(entity.certificateTemplateBase64){
+      certificateTemplateURL = await uploadCloudinary (entity.certificateTemplateBase64);
+    }
     const newCourse = await CourseModel.create({
       title: entity.title,
       description: entity.description,

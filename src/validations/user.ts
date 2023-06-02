@@ -19,7 +19,7 @@ export const UserValidation = {
     company: Joi.string(),
     password: Joi.string().min(8).required(),
     inscriptions: Joi.array().items(Joi.string()).required(),
-    typePayment: Joi.string().valid(...['paid','pending','reject']).required(),
+    typePayment: Joi.string().valid(...['transfer','efective']).required(),
     voucherBase64: Joi.string()
       .custom((value, helpers)=>{
         if(!new RegExp(/^data:([a-z]+\/[a-z]+);base64,([a-zA-Z0-9+/]+={0,2})$/).test(value)){

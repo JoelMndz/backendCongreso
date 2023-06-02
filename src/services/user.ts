@@ -19,7 +19,7 @@ interface IRegisterParticipant{
 }
 
 export const UserService = {
-  registerParticipant: async(entity:IRegisterParticipant)=>{
+  registerParticipant: async(entity:IRegisterParticipant)=>{    
     const {error} = UserValidation.validateCreateParticipant.validate(entity)
     if(error){
       throw new Error(error.message);
