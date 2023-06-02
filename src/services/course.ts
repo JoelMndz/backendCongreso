@@ -47,30 +47,28 @@ export const CourseService = {
   },
 
   updateCourse: async (id: string, updates: Partial<ICreateCourse>) => {
-    const { error } = CourseValidation.validateCreateCourse.validate(updates);
+    const { error } = CourseValidation.validateUpdateCourse.validate(updates);
     if (error) {
       throw new Error(error.message);
     }
-    const allowedUpdates: (keyof ICreateCourse)[] = [
-      "title",
-      "description",
-      "photoBase64",//opcional
-      "price",
-      "type",
-      "startDate",
-      "endDate",
-      "certificateTemplateBase64",//opcional
-    ];
-    const updatesKeys = Object.keys(updates) as (keyof ICreateCourse)[];
-    const isValidOperation = updatesKeys.every((key) =>
-      allowedUpdates.includes(key)
-    );
-    if (!isValidOperation) {
-      throw new Error("Invalid updates!");
+
+    let queryUpdate: any = {
+      title: updates.title,
+      description: updates.description,
+      price: updates.price,
+      type: updates.type,
+      startDate: updates.startDate,
+      endDate: updates.endDate,
+    };
+
+    if (updates.photoBase64) {
+      queryUpdate.photoURL = await uploadCloudinary(updates.photoBase64);
     }
-    const updatedCourse = await CourseModel.findByIdAndUpdate(id, updates, {
-      new: true,
-    });
+
+    if (updates.certificateTemplateBase64) {
+      queryUpdate.certificateTemplateURL = await uploadCloudinary(updates.certificateTemplateBase64);
+    }
+    const updatedCourse = await CourseModel.findByIdAndUpdate(id, updates);
     return updatedCourse;
   },
 
