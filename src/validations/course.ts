@@ -23,5 +23,46 @@ export const CourseValidation = {
       .required(),
     startDate: Joi.date().required(),
     endDate: Joi.date().required(),
+    certificateTemplateBase64: Joi.string()
+      .custom((value, helpers) => {
+        if (
+          !new RegExp(
+            /^data:([a-z]+\/[a-z]+);base64,([a-zA-Z0-9+/]+={0,2})$/
+          ).test(value)
+        ) {
+          return helpers.error("string.custom.validarBase64");
+        }
+        return value;
+      })
+      .required(),
+  }).messages(joiMessages),
+
+  validateUpdateCourse: Joi.object({
+    title: Joi.string(),
+    description: Joi.string(),
+    photoBase64: Joi.string().custom((value, helpers) => {
+      if (
+        !new RegExp(
+          /^data:([a-z]+\/[a-z]+);base64,([a-zA-Z0-9+/]+={0,2})$/
+        ).test(value)
+      ) {
+        return helpers.error("string.custom.validarBase64");
+      }
+      return value;
+    }),
+    price: Joi.number(),
+    type: Joi.string().valid(...["workshop", "congress"]),
+    startDate: Joi.date(),
+    endDate: Joi.date(),
+    certificateTemplateBase64: Joi.string().custom((value, helpers) => {
+      if (
+        !new RegExp(
+          /^data:([a-z]+\/[a-z]+);base64,([a-zA-Z0-9+/]+={0,2})$/
+        ).test(value)
+      ) {
+        return helpers.error("string.custom.validarBase64");
+      }
+      return value;
+    }),
   }).messages(joiMessages),
 };
