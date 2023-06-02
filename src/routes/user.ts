@@ -36,16 +36,16 @@ RouterUser.post('/register-participant', UserController.registerParticipant);
  *        - typePayment
  *        - voucherBase64
  *      example:
- *        name: Luis Joel
- *        lastname: Perez Loor
+ *        name: "Luis Joel"
+ *        lastname: "Perez Loor"
  *        phone: "0983334657"
- *        email: luisjo3lml@gmail.com
- *        cedula: 1312386962
- *        address: manta
- *        company: AbiDev
- *        password: 12345678
+ *        email: "luisjo3lml@gmail.com"
+ *        cedula: "1312386962"
+ *        address: "manta"
+ *        company: "AbiDev"
+ *        password: "12345678"
  *        inscriptions: ["638cb9c5959e03572e1e7309","838cb9c5959e03572e1e7380"]
- *        typePayment: transfert
+ *        typePayment: "transfer"
  *        voucherBase64: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA...
  *        
  *    Error:

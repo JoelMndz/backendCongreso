@@ -3,7 +3,7 @@ import { CourseController } from "../controllers";
 
 export const RouterCourse = Router();
 
-RouterCourse.post('/crete-course', CourseController.createCourse);
+RouterCourse.post('/create-course', CourseController.createCourse);
 
 /**
  * /**
