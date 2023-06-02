@@ -9,6 +9,7 @@ interface ICreateCourse {
   type: string,
   startDate: Date,
   endDate: Date,
+  certificateTemplateBase64: string
 }
 
 export const CourseService = {
@@ -18,6 +19,7 @@ export const CourseService = {
       throw new Error(error.message);
     }
     const photoURL = await uploadCloudinary(entity.photoBase64);
+    const certificateTemplateURL = await uploadCloudinary (entity.certificateTemplateBase64);
     const newCourse = await CourseModel.create({
       title: entity.title,
       description: entity.description,
@@ -26,6 +28,7 @@ export const CourseService = {
       type: entity.type,
       startDate: entity.startDate,
       endDate: entity.endDate,
+      certificateTemplateURL: certificateTemplateURL
     });
     return newCourse;
   },
@@ -53,6 +56,7 @@ export const CourseService = {
       "type",
       "startDate",
       "endDate",
+      "certificateTemplateBase64",
     ];
     const updatesKeys = Object.keys(updates) as (keyof ICreateCourse)[];
     const isValidOperation = updatesKeys.every((key) =>
