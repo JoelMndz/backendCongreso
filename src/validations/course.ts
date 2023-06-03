@@ -4,7 +4,7 @@ import { joiMessages } from "./joiMessage";
 export const CourseValidation = {
   validateCreateCourse: Joi.object({
     title: Joi.string().required(),
-    description: Joi.string().required(),
+    description: Joi.string(),
     photoBase64: Joi.string()
       .custom((value, helpers) => {
         if (
@@ -33,8 +33,7 @@ export const CourseValidation = {
           return helpers.error("string.custom.validarBase64");
         }
         return value;
-      })
-      .required(),
+      }),
   }).messages(joiMessages),
 
   validateUpdateCourse: Joi.object({

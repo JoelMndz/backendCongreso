@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { CourseController } from "../controllers";
+import { allowAdiministrator } from "../middlewares/alllowAdministrator";
 
 export const RouterCourse = Router();
 
-RouterCourse.post('/create-course', CourseController.createCourse);
+RouterCourse.post('/create-course', allowAdiministrator, CourseController.createCourse);
 
 /**
  * /**
@@ -76,6 +77,13 @@ RouterCourse.post('/create-course', CourseController.createCourse);
  *   post:
  *     summary: Crear un curso
  *     tags: [Course]
+ *     parameters:
+ *      - in: header
+ *        name: token
+ *        description: Token de autenticación
+ *        required: true
+ *        schema:
+ *          type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -249,7 +257,7 @@ RouterCourse.get('/get-course/:id', CourseController.getCourseById);
  *               $ref: '#/components/schemas/Error'
  */
 
-RouterCourse.put('/update-course/:id', CourseController.updateCourse);
+RouterCourse.put('/update-course/:id', allowAdiministrator, CourseController.updateCourse);
 
 /**
  * @swagger
@@ -329,6 +337,12 @@ RouterCourse.put('/update-course/:id', CourseController.updateCourse);
  *         required: true
  *         schema:
  *           type: string
+ *       - in: header
+ *         name: token
+ *         description: Token de autenticación
+ *         required: true
+ *         schema:
+ *          type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -350,7 +364,7 @@ RouterCourse.put('/update-course/:id', CourseController.updateCourse);
  *               $ref: '#/components/schemas/Error'
  */
 
-RouterCourse.delete('/delete-course/:id', CourseController.deleteCourse);
+RouterCourse.delete('/delete-course/:id', allowAdiministrator, CourseController.deleteCourse);
 /**
  * @swagger
  * components:
@@ -399,6 +413,12 @@ RouterCourse.delete('/delete-course/:id', CourseController.deleteCourse);
  *         required: true
  *         schema:
  *           type: string
+ *       - in: header
+ *         name: token
+ *         description: Token de autenticación
+ *         required: true
+ *         schema:
+ *          type: string
  *     responses:
  *       '200':
  *         description: Devuelve el curso con el id ingresado

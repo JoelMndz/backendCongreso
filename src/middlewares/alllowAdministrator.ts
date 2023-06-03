@@ -3,9 +3,11 @@ import jwt from 'jsonwebtoken';
 import { SECRET } from '../config';
 import { NextFunction, Request, Response } from 'express';
 import { handleError } from '../error';
+import { UserModel } from '../models';
+import { ROLES } from '../constants';
 
 
-export const verificarToken = async(req:Request, res:Response, next:NextFunction)=>{
+export const allowAdiministrator = async(req:Request, res:Response, next:NextFunction)=>{
     try {
       const token = req.headers['token'] as string;
 
@@ -17,6 +19,8 @@ export const verificarToken = async(req:Request, res:Response, next:NextFunction
 
       const decode:any = jwt.verify(token!, SECRET!);
       
+      const user = await UserModel.findById(decode.id)
+      if (user?.role !== ROLES.ADMINISTRATOR) throw new Error("Usuario no autorizado, solo está autorizado el administrador");
       req.query.userId = decode.id;
       next();
     } catch (error:any) {

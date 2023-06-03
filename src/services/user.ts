@@ -1,6 +1,7 @@
 import mongoose,{Types} from "mongoose"
+import qrcode from 'qrcode'
 
-import { ROLES } from "../constants"
+import { METHOD_PAYMENT, ROLES, STATUS_REGISTER } from "../constants"
 import { encryptText, generateToken,uploadCloudinary } from "../utils"
 import { UserValidation } from "../validations"
 import {RegisterModel, CourseModel, UserModel} from '../models'
@@ -20,9 +21,25 @@ interface IRegisterParticipant{
   voucherBase64: string
 }
 
+interface IRegisterAdmin{
+  name: string,
+  lastname: string,
+  email: string,
+  phone: string,
+  cedula: string,
+  address: string,
+  company: string,
+  password: string
+}
+
 interface IRequestLogin{
   email: string,
   password: string,
+}
+
+interface IUpdateStatusRegister{
+  status: string,
+  registerId: string
 }
 
 export const UserService = {
@@ -59,7 +76,8 @@ export const UserService = {
         inscriptions.push({ courseId: new Types.ObjectId(entity.inscriptions[i]) })
       }
 
-      const voucherURL = await uploadCloudinary(entity.voucherBase64);
+      let voucherURL = null
+      if(entity.typePayment === METHOD_PAYMENT.TRANSFER && entity.voucherBase64) voucherURL = await uploadCloudinary(entity.voucherBase64);
       const newRegister = new RegisterModel({
         typePayment: entity.typePayment,
         userId: newUser._id,
@@ -96,5 +114,50 @@ export const UserService = {
 
   async findById(id:string){
     return await UserModel.findById(id);
-  }
+  },
+
+  async getAllRegisters(status:string){
+    let match:any = {}
+    if(status) match.status = status;
+
+    return await RegisterModel.find(match).populate('userId').populate('inscriptions.courseId')
+  },
+
+  async updateStatusRegister(entity:IUpdateStatusRegister){
+    const {error} = UserValidation.validateUpdateStatusRegister.validate(entity);
+    if(error) throw new Error(error.message);
+    let updateRegister = await RegisterModel.findById(entity.registerId);
+    if(!updateRegister) throw new Error('El registroId no es inválido');
+    updateRegister.status = entity.status;
+    if(updateRegister.status === STATUS_REGISTER.PAID){
+      const qr = await qrcode.toDataURL(updateRegister.userId?.toString()!)
+      updateRegister.qr = qr;
+    }
+    
+    return await updateRegister?.save()
+  },
+
+  registerAdmin: async(entity:IRegisterAdmin)=>{    
+    const {error} = UserValidation.validateRegisterAdmin.validate(entity)
+    if(error) throw new Error(error.message);
+    const resultfindUserByEmail = await UserModel.findOne({email:entity.email.toLocaleLowerCase()});
+    if(resultfindUserByEmail) throw new Error('El email ya se encuentra registrado');
+
+    const existsAdmin = await UserModel.findOne({role: ROLES.ADMINISTRATOR});
+    if(existsAdmin) throw new Error('Ya existe un administrador registrado');
+
+    entity.password = await encryptText(entity.password)
+    
+    return await UserModel.create({
+      name: entity.name.toLocaleLowerCase(),
+      lastname: entity.lastname.toLocaleLowerCase(),
+      email: entity.email.toLocaleLowerCase(),
+      phone: entity.phone,
+      cedula: entity.cedula,
+      address: entity.address.toLocaleLowerCase(),
+      company: entity.company.toLocaleLowerCase(),
+      password: entity.password,
+      role: ROLES.ADMINISTRATOR,
+    })
+  },
 }

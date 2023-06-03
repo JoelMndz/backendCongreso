@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { joiMessages } from './joiMessage';
 import { Types } from 'mongoose';
+import { METHOD_PAYMENT, STATUS_REGISTER } from '../constants';
 
 export const UserValidation = {
   validateCreateParticipant: Joi.object({
@@ -27,13 +28,16 @@ export const UserValidation = {
     }))
       .required(),
     typePayment: Joi.string().valid(...['transfer','efective']).required(),
-    voucherBase64: Joi.string()
-      .custom((value, helpers)=>{
+    voucherBase64: Joi.string().when('typePayment',{
+      is: METHOD_PAYMENT.TRANSFER,
+      then: Joi.custom((value, helpers)=>{
         if(!new RegExp(/^data:([a-z]+\/[a-z]+);base64,([a-zA-Z0-9+/]+={0,2})$/).test(value)){
           return helpers.error('string.custom.validarBase64');
         }
         return value;
       }).required(),
+      otherwise: Joi.optional()
+    }),
   })
   .messages(joiMessages),
 
@@ -41,7 +45,37 @@ export const UserValidation = {
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
   })
-  .messages(joiMessages)
+  .messages(joiMessages),
+
+  validateUpdateStatusRegister: Joi.object({
+    status: Joi.string().valid(...[STATUS_REGISTER.PAID,STATUS_REGISTER.PENDING,STATUS_REGISTER.REJECT]).required(),
+    registerId: Joi.string().custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.error('objectId.invalid');
+      }
+      return value;
+    }),
+  })
+  .messages(joiMessages),
+
+  validateRegisterAdmin: Joi.object({
+    name: Joi.string().required(),
+    lastname: Joi.string().required(),
+    email: Joi.string().email().required(),
+    phone: Joi.string().required(),
+    cedula: Joi.string()
+      .custom((value,helpers)=>{
+        if(!validateCedula(value)){
+          return helpers.error('string.custom.validateCedula'); 
+        }
+        return value;
+      })
+      .required(),
+    address: Joi.string(),
+    company: Joi.string(),
+    password: Joi.string().min(8).required(),
+  })
+  .messages(joiMessages),
 }
 
 

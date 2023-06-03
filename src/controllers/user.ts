@@ -29,4 +29,31 @@ export const UserController = {
       handleError(res, error);
     }
   },
+
+  getAllRegisters: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.getAllRegisters(req.query.status as string);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
+
+  updateStatusRegister: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.updateStatusRegister(req.body);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
+
+  registerAdministrator: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.registerAdmin(req.body);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
 };

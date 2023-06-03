@@ -1,14 +1,16 @@
 import {Schema, model} from 'mongoose';
 
+import { METHOD_PAYMENT, STATUS_REGISTER } from '../constants';
+
 const registerSchema = new Schema({
   typePayment:{
     type: String,
-    enum: ['efective','transfer']
+    enum: [METHOD_PAYMENT.EFECTIVE,METHOD_PAYMENT.TRANSFER]
   },
   status:{
     type: String,
-    enum: ['paid','pending','reject'],
-    default: 'pending'
+    enum: [STATUS_REGISTER.PAID,STATUS_REGISTER.PENDING,STATUS_REGISTER.REJECT],
+    default: STATUS_REGISTER.PENDING
   },
   inscriptions: [
     {
