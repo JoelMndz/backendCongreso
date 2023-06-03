@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { joiMessages } from './joiMessage';
+import { Types } from 'mongoose';
 
 export const UserValidation = {
   validateCreateParticipant: Joi.object({
@@ -18,7 +19,13 @@ export const UserValidation = {
     address: Joi.string(),
     company: Joi.string(),
     password: Joi.string().min(8).required(),
-    inscriptions: Joi.array().items(Joi.string()).required(),
+    inscriptions: Joi.array().min(1).items(Joi.string().custom((value, helpers) => {
+      if (!Types.ObjectId.isValid(value)) {
+        return helpers.error('objectId.invalid');
+      }
+      return value;
+    }))
+      .required(),
     typePayment: Joi.string().valid(...['transfer','efective']).required(),
     voucherBase64: Joi.string()
       .custom((value, helpers)=>{
@@ -27,6 +34,12 @@ export const UserValidation = {
         }
         return value;
       }).required(),
+  })
+  .messages(joiMessages),
+
+  validateLogin: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required(),
   })
   .messages(joiMessages)
 }

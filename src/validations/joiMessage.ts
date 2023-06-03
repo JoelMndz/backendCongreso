@@ -13,6 +13,7 @@ export const joiMessages = {
     'number.max': 'El campo "{#label}" debe ser menor o igual a {#limit}.',
     'string.email': 'El campo "{#label}" debe ser una dirección de correo válida.',
     'string.custom.validateCedula': 'La cédula no es válida.',
-    'string.custom.validateBase64': 'El archivo debe estar en base 64'
+    'string.custom.validateBase64': 'El archivo debe estar en base 64',
+    'objectId.invalid': 'El objectId no es válido',
   };
   

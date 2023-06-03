@@ -11,4 +11,22 @@ export const UserController = {
       handleError(res, error);
     }
   },
+
+  login: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.login(req.body);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
+
+  loginWithToken: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.findById(req.query.userId as string);
+      return res.json({user: data, token: req.headers.token});
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
 };
