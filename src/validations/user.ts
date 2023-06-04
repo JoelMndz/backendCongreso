@@ -28,15 +28,15 @@ export const UserValidation = {
     }))
       .required(),
     typePayment: Joi.string().valid(...['transfer','efective']).required(),
-    voucherBase64: Joi.string().when('typePayment',{
+    voucherBase64: Joi.when('typePayment',{
       is: METHOD_PAYMENT.TRANSFER,
       then: Joi.custom((value, helpers)=>{
         if(!new RegExp(/^data:([a-z]+\/[a-z]+);base64,([a-zA-Z0-9+/]+={0,2})$/).test(value)){
-          return helpers.error('string.custom.validarBase64');
+          return helpers.error('string.custom.validateBase64');
         }
         return value;
       }),
-      otherwise: Joi.optional().empty('')
+      otherwise: Joi.optional()
     }),
   })
   .messages(joiMessages),
