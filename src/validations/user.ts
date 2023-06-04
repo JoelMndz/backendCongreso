@@ -35,8 +35,8 @@ export const UserValidation = {
           return helpers.error('string.custom.validarBase64');
         }
         return value;
-      }).required(),
-      otherwise: Joi.optional()
+      }),
+      otherwise: Joi.optional().empty('')
     }),
   })
   .messages(joiMessages),
