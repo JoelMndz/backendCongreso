@@ -4,6 +4,7 @@ import cors from "cors";
 import swaggerExpress from "swagger-ui-express";
 import swaggerDoc from "swagger-jsdoc";
 
+
 import { swaggerOptions } from "./docs";
 import { DOMAIN, PORT } from "./config";
 import { connectMongoDB } from "./database";
