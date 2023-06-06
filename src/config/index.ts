@@ -1,7 +1,9 @@
 import {config} from 'dotenv';
 
-if(process.env.NODE_ENV !== 'production'){
-  config();
+if(process.env.NODE_ENV === 'production'){
+  config({ path: '.env.production' });
+}else{
+  config({ path: '.env.development' });
 }
 
 export const PORT = process.env.PORT || 5001;

@@ -46,7 +46,7 @@ export const CourseService = {
     return course;
   },
 
-  updateCourse: async (id: string, updates: Partial<ICreateCourse>) => {
+  updateCourse: async (id: string, updates: ICreateCourse) => {
     const { error } = CourseValidation.validateUpdateCourse.validate(updates);
     if (error) {
       throw new Error(error.message);
@@ -68,7 +68,8 @@ export const CourseService = {
     if (updates.certificateTemplateBase64) {
       queryUpdate.certificateTemplateURL = await uploadCloudinary(updates.certificateTemplateBase64);
     }
-    const updatedCourse = await CourseModel.findByIdAndUpdate(id, updates);
+
+    const updatedCourse = await CourseModel.findByIdAndUpdate(id, queryUpdate);
     return updatedCourse;
   },
 

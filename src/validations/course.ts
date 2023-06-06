@@ -45,10 +45,10 @@ export const CourseValidation = {
           /^data:([a-z]+\/[a-z]+);base64,([a-zA-Z0-9+/]+={0,2})$/
         ).test(value)
       ) {
-        return helpers.error("string.custom.validarBase64");
+        return helpers.error("string.custom.validateBase64");
       }
       return value;
-    }),
+    }).optional(),
     price: Joi.number(),
     type: Joi.string().valid(...["workshop", "congress"]),
     startDate: Joi.date(),
@@ -59,9 +59,9 @@ export const CourseValidation = {
           /^data:([a-z]+\/[a-z]+);base64,([a-zA-Z0-9+/]+={0,2})$/
         ).test(value)
       ) {
-        return helpers.error("string.custom.validarBase64");
+        return helpers.error("string.custom.validateBase64");
       }
       return value;
-    }),
+    }).optional(),
   }).messages(joiMessages),
 };
