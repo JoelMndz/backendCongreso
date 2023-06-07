@@ -1,16 +1,36 @@
-import {Router} from 'express';
-import { UserController } from '../controllers';
-import { verificarToken } from '../middlewares';
-import { allowAdiministrator } from '../middlewares/alllowAdministrator';
+import { Router } from "express";
+import { UserController } from "../controllers";
+import { verificarToken } from "../middlewares";
+import { allowAdiministrator } from "../middlewares/alllowAdministrator";
 
 export const RouterUser = Router();
 
-RouterUser.post('/register-participant', UserController.registerParticipant);
-RouterUser.post('/login', UserController.login);
-RouterUser.get('/login-with-token', verificarToken, UserController.loginWithToken)
-RouterUser.get('/get-all-registers', allowAdiministrator, UserController.getAllRegisters)
-RouterUser.put('/update-status-register', allowAdiministrator, UserController.updateStatusRegister)
-RouterUser.post('/register-administrator', UserController.registerAdministrator);
+RouterUser.post("/register-participant", UserController.registerParticipant);
+RouterUser.post("/login", UserController.login);
+RouterUser.get(
+  "/login-with-token",
+  verificarToken,
+  UserController.loginWithToken
+);
+RouterUser.get(
+  "/get-all-registers",
+  allowAdiministrator,
+  UserController.getAllRegisters
+);
+RouterUser.put(
+  "/update-status-register",
+  allowAdiministrator,
+  UserController.updateStatusRegister
+);
+RouterUser.post(
+  "/register-administrator",
+  UserController.registerAdministrator
+);
+RouterUser.post(
+  "/register-new-admin",
+  allowAdiministrator,
+  UserController.registerNewAdmin
+);
 
 /**
  * @swagger
@@ -65,7 +85,6 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *        - password
  *      example:
  *        email: "example@gmail.com"
- *        password: "12345678"
  *    RequestUpdateStatusRegister:
  *      type: object
  *      properties:
@@ -109,7 +128,6 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *        - cedula
  *        - address
  *        - company
- *        - password
  *      example:
  *        name: "Luis Joel"
  *        lastname: "Perez Loor"
@@ -118,7 +136,6 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *        cedula: "1312386962"
  *        address: "manta"
  *        company: "AbiDev"
- *        password: "12345678"
  */
 
 /**
@@ -139,18 +156,17 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/RequestRegisterParticipant'    
+ *            $ref: '#/components/schemas/RequestRegisterParticipant'
  *    responses:
  *      200:
  *        description: Devuelve el usuario ingresado con el id
  *      400:
- *        description: Devuelve un objeto de tipo Error  
+ *        description: Devuelve un objeto de tipo Error
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Error'                  
+ *              $ref: '#/components/schemas/Error'
  */
-
 
 /**
  * @swagger
@@ -163,16 +179,16 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/RequestLogin'    
+ *            $ref: '#/components/schemas/RequestLogin'
  *    responses:
  *      200:
  *        description: Devuelve los datos del usuario y el token
  *      400:
- *        description: Devuelve un objeto de tipo Error  
+ *        description: Devuelve un objeto de tipo Error
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Error'                  
+ *              $ref: '#/components/schemas/Error'
  */
 
 /**
@@ -192,11 +208,11 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *      200:
  *        description: Devuelve los datos del usuario y el token
  *      400:
- *        description: Devuelve un objeto de tipo Error  
+ *        description: Devuelve un objeto de tipo Error
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Error'                  
+ *              $ref: '#/components/schemas/Error'
  */
 
 /**
@@ -221,11 +237,11 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *      200:
  *        description: Devuelve un array con los pagos segun el status (paid,pending,reject)
  *      400:
- *        description: Devuelve un objeto de tipo Error  
+ *        description: Devuelve un objeto de tipo Error
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Error'                  
+ *              $ref: '#/components/schemas/Error'
  */
 
 /**
@@ -246,16 +262,16 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/RequestUpdateStatusRegister'   
+ *            $ref: '#/components/schemas/RequestUpdateStatusRegister'
  *    responses:
  *      200:
  *        description: Devuelve el registro actualizado
  *      400:
- *        description: Devuelve un objeto de tipo Error  
+ *        description: Devuelve un objeto de tipo Error
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Error'                  
+ *              $ref: '#/components/schemas/Error'
  */
 
 /**
@@ -269,14 +285,45 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/RequestRegisterAdministrator'    
+ *            $ref: '#/components/schemas/RequestRegisterAdministrator'
  *    responses:
  *      200:
  *        description: Devuelve el usuario ingresado con el id
  *      400:
- *        description: Devuelve un objeto de tipo Error  
+ *        description: Devuelve un objeto de tipo Error
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Error'                  
+ *              $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /api/user/register-new-admin:
+ *   post:
+ *     summary: Registro del administrador con email
+ *     tags:
+ *       - Usuario
+ *     parameters:
+ *       - in: header
+ *         name: token
+ *         description: Token de autenticación
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RequestRegisterAdministrator'
+ *     responses:
+ *       '200':
+ *         description: Devuelve el usuario ingresado con el id
+ *       '400':
+ *         description: Devuelve un objeto de tipo Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
