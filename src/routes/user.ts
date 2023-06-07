@@ -11,6 +11,7 @@ RouterUser.get('/login-with-token', verificarToken, UserController.loginWithToke
 RouterUser.get('/get-all-registers', allowAdiministrator, UserController.getAllRegisters)
 RouterUser.put('/update-status-register', allowAdiministrator, UserController.updateStatusRegister)
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
+RouterUser.get('/get-user-courses', verificarToken, UserController.getUserCourses)
 
 /**
  * @swagger
@@ -279,4 +280,35 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/Error'                  
+ */
+
+
+/**
+ * @swagger
+ * /api/user/get-user-courses:
+ *   get:
+ *     summary: Obtener los cursos en los que el usuario está inscrito
+ *     tags: [Usuario]
+ *     parameters:
+ *       - in: header
+ *         name: token
+ *         description: Token de autenticación
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Devuelve un array con los cursos en los que el usuario está inscrito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Curso'
+ *       400:
+ *         description: Devuelve un objeto de tipo Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */

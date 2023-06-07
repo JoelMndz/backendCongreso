@@ -39,6 +39,15 @@ export const UserController = {
     }
   },
 
+  getUserCourses: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.getUserCourses(req.query.userId as string);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
+  
   updateStatusRegister: async (req: Request, res: Response) => {
     try {
       const data = await UserService.updateStatusRegister(req.body);

@@ -42,6 +42,7 @@ interface IUpdateStatusRegister{
   registerId: string
 }
 
+
 export const UserService = {
   registerParticipant: async(entity:IRegisterParticipant)=>{    
     const {error} = UserValidation.validateCreateParticipant.validate(entity)
@@ -137,6 +138,17 @@ export const UserService = {
     return await updateRegister?.save()
   },
 
+  getUserCourses: async(userId:string) => {
+    const user = await RegisterModel.findById(userId);
+    if (user) {
+      const { inscriptions } = user;
+      const courseIds = inscriptions.map((inscription) => inscription.courseId);
+      const courses = await CourseModel.find({ _id: { $in: courseIds } });
+      return courses;
+    }
+    return [];
+  },
+  
   registerAdmin: async(entity:IRegisterAdmin)=>{    
     const {error} = UserValidation.validateRegisterAdmin.validate(entity)
     if(error) throw new Error(error.message);
