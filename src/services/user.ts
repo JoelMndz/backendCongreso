@@ -50,51 +50,41 @@ export const UserService = {
     if(resultfindUserByEmail) throw new Error('El email ya se encuentra registrado');
     entity.password = await encryptText(entity.password)
     
-    const session = await mongoose.startSession();
-    session.startTransaction();
-    try {
-      const newUser = new UserModel({
-        name: entity.name.toLocaleLowerCase(),
-        lastname: entity.lastname.toLocaleLowerCase(),
-        email: entity.email.toLocaleLowerCase(),
-        phone: entity.phone,
-        cedula: entity.cedula,
-        address: entity.address.toLocaleLowerCase(),
-        company: entity.company.toLocaleLowerCase(),
-        password: entity.password,
-        role: ROLES.PARTICIPANT,
-      })
+    const newUser = new UserModel({
+      name: entity.name.toLocaleLowerCase(),
+      lastname: entity.lastname.toLocaleLowerCase(),
+      email: entity.email.toLocaleLowerCase(),
+      phone: entity.phone,
+      cedula: entity.cedula,
+      address: entity.address.toLocaleLowerCase(),
+      company: entity.company.toLocaleLowerCase(),
+      password: entity.password,
+      role: ROLES.PARTICIPANT,
+    })
 
-      await newUser.save({session})
-
-      let total = 0;
-      const inscriptions:any[] = []
-      for (let i = 0; i < entity.inscriptions.length; i++) {
-        const course = await CourseModel.findById(entity.inscriptions[i]);
-        if(!course) throw new Error(`El id ${entity.inscriptions[i]} no le pertenece a ningún curso`);
-        total += course.price!
-        inscriptions.push({ courseId: new Types.ObjectId(entity.inscriptions[i]) })
-      }
-
-      let voucherURL = null
-      if(entity.typePayment === METHOD_PAYMENT.TRANSFER && entity.voucherBase64) voucherURL = await uploadCloudinary(entity.voucherBase64);
-      const newRegister = new RegisterModel({
-        typePayment: entity.typePayment,
-        userId: newUser._id,
-        voucherURL:voucherURL,
-        total,
-        inscriptions,
-      })
-      await newRegister.save({session});
-      
-      await session.commitTransaction();
-      session.endSession();
-      return newUser;
-    } catch (error:any) {
-      await session.abortTransaction();
-      session.endSession();
-      throw error
+    let total = 0;
+    const inscriptions:any[] = []
+    for (let i = 0; i < entity.inscriptions.length; i++) {
+      const course = await CourseModel.findById(entity.inscriptions[i]);
+      if(!course) throw new Error(`El id ${entity.inscriptions[i]} no le pertenece a ningún curso`);
+      total += course.price!
+      inscriptions.push({ courseId: new Types.ObjectId(entity.inscriptions[i]) })
     }
+
+    let voucherURL = null
+    if(entity.typePayment === METHOD_PAYMENT.TRANSFER && entity.voucherBase64) voucherURL = await uploadCloudinary(entity.voucherBase64);
+    const newRegister = new RegisterModel({
+      typePayment: entity.typePayment,
+      userId: newUser._id,
+      voucherURL:voucherURL,
+      total,
+      inscriptions,
+    })
+
+    await newUser.save();
+    await newRegister.save();
+    
+    return newUser;
   },
 
   async login(entity:IRequestLogin){
