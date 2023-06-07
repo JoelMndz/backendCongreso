@@ -1,4 +1,4 @@
-import mongoose,{Types} from "mongoose"
+import {Types} from "mongoose"
 import qrcode from 'qrcode'
 
 import { METHOD_PAYMENT, ROLES, STATUS_REGISTER } from "../constants"
