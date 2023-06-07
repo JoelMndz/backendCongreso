@@ -38,7 +38,7 @@ export const CourseValidation = {
 
   validateUpdateCourse: Joi.object({
     title: Joi.string(),
-    description: Joi.string(),
+    description: Joi.optional(),
     photoBase64: Joi.string().custom((value, helpers) => {
       if (
         !new RegExp(
