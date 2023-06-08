@@ -14,10 +14,10 @@ const registerSchema = new Schema({
   },
   inscriptions: [
     {
-      attendanceDate:{
-          type: Date,
-          default: null
-      },
+      attendanceDate:[{
+        type: [String],
+        default: []
+      }],
       certificateURL: {
           type: String,
           default: null

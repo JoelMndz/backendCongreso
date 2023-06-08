@@ -56,4 +56,23 @@ export const UserController = {
       handleError(res, error);
     }
   },
+
+  checkAttendance: async (req:Request,res: Response) => {
+    try {
+      const data = await UserService.checkAttendance(req.body);
+      return res.json(data)
+      
+    } catch (error:any) {
+      handleError(res,error)
+    }
+  },
+  checkAttendanceIdentity: async (req:Request,res: Response) => {
+    try {
+      const data = await UserService.checkAttendanceIdentity(req.body);
+      return res.json(data)
+      
+    } catch (error:any) {
+      handleError(res,error)
+    }
+  }
 };

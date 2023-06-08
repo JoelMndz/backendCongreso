@@ -6,7 +6,6 @@ import { encryptText, generateToken,uploadCloudinary } from "../utils"
 import { UserValidation } from "../validations"
 import {RegisterModel, CourseModel, UserModel} from '../models'
 
-
 interface IRegisterParticipant{
   name: string,
   lastname: string,
@@ -40,6 +39,17 @@ interface IRequestLogin{
 interface IUpdateStatusRegister{
   status: string,
   registerId: string
+}
+
+interface IcheckAttendance{
+  courseId : string,
+  userId: string
+}
+
+
+interface ICheckAttendanceIdentity{
+  cedula : string,
+  courseId: string
 }
 
 export const UserService = {
@@ -160,4 +170,66 @@ export const UserService = {
       role: ROLES.ADMINISTRATOR,
     })
   },
+
+  checkAttendance: async(entity:IcheckAttendance)=>{
+    const existeUsuario = await RegisterModel.findOne({userId:entity.userId,'inscriptions.courseId':entity.courseId});
+    const course = await CourseModel.findOne({_id:entity.courseId});
+    const now = Date.now();
+    const fecha =new Date(now);
+    const year = fecha.getFullYear();
+    const month = fecha.getMonth() + 1; 
+    const day = fecha.getDate();
+    const fechaBusqueda = `${day}-${month}-${year}`;
+    //const fechaBusqueda = "9-6-2023";
+    const fechaExistente = await RegisterModel.findOne({userId:entity.userId,'inscriptions.courseId':entity.courseId,'inscriptions.attendanceDate':fechaBusqueda});
+    
+    if (existeUsuario && existeUsuario.status == "paid") {
+      if (course?.startDate && fecha >= course.startDate && course?.endDate && fecha <= course.endDate) {
+        if (!fechaExistente) {
+          return await RegisterModel.findOneAndUpdate({'userId':entity.userId,'inscriptions.courseId':entity.courseId},{$push: {'inscriptions.$.attendanceDate':fechaBusqueda}},{new:true});
+        }else{
+          throw new Error('!Ya se encuntra registrada la asistencia!');
+        }
+
+      } else {
+        throw new Error(`Inicio :${course?.startDate} - Fin: ${course?.endDate} del curso, ya no se pueden registrar asistencias`);
+      }
+
+    }else{
+       throw new Error('!El usuario no se encuentra registrado en el curso!');
+    }
+  },
+  checkAttendanceIdentity: async(entity:ICheckAttendanceIdentity)=>{
+    const usuario = await UserModel.findOne({cedula:entity.cedula});
+    if(!usuario){
+     throw new Error('!El usuario no se encuentra registrado!');
+    }
+    const userId = usuario._id.toString();
+    const existeUsuario = await RegisterModel.findOne({userId:userId,'inscriptions.courseId':entity.courseId});
+    const course = await CourseModel.findOne({_id:entity.courseId});
+    const now = Date.now();
+    const fecha =new Date(now)
+    const year = fecha.getFullYear();
+    const month = fecha.getMonth() + 1; 
+    const day = fecha.getDate();
+    const fechaBusqueda = `${day}-${month}-${year}`;
+    //const fechaBusqueda = "9-6-2023";
+
+    const fechaExistente = await RegisterModel.findOne({userId:userId,'inscriptions.courseId':entity.courseId,'inscriptions.attendanceDate':fechaBusqueda});
+    if (existeUsuario && existeUsuario.status == "paid" ) {
+      if (course?.startDate && fecha >= course.startDate && course?.endDate && fecha <= course.endDate) {
+        if (!fechaExistente) {
+          return await RegisterModel.findOneAndUpdate({'userId':userId,'inscriptions.courseId':entity.courseId},{$push: {'inscriptions.$.attendanceDate':fechaBusqueda}},{new:true});
+        }else{
+          throw new Error('Ya se encuntra registrada la asistencia!');
+        }
+      }else{
+        throw new Error(`Inicio :${course?.startDate} - Fin: ${course?.endDate} del curso, ya no se pueden registrar asistencias`);
+
+      }
+    }else{
+      throw new Error('El usuario no se encuentra registrado en el curso!');
+    }
+    
+  }
 }
