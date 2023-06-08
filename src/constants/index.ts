@@ -12,3 +12,15 @@ export const METHOD_PAYMENT = {
     TRANSFER: 'transfer',
     EFECTIVE: 'efective',
 }
+export const TYPE_PRICE_CONGRESS = {
+    medico_especialista: "medico_especialista",
+    medico_general: "medico_general",
+    medico_rural: "medico_rural",
+    profesional_salud: "profesional_salud",
+    estudiante: "estudiante",
+    ponencia_congreso_memorias: "ponencia_congreso_memorias"
+}
+export const TYPE_COURSE = {
+    CONGRESS: "congress",
+    WORKSHOP: "workshop",
+}

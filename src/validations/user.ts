@@ -8,14 +8,9 @@ export const UserValidation = {
     name: Joi.string().required(),
     lastname: Joi.string().required(),
     email: Joi.string().email().required(),
+    participantType: Joi.string().required(),
     phone: Joi.string().required(),
     cedula: Joi.string()
-      .custom((value,helpers)=>{
-        if(!validateCedula(value)){
-          return helpers.error('string.custom.validateCedula'); 
-        }
-        return value;
-      })
       .required(),
     address: Joi.string(),
     company: Joi.string(),

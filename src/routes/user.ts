@@ -24,6 +24,7 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *        name: string
  *        lastname: string
  *        email: string
+ *        participantType: string
  *        phone: string
  *        cedula: string
  *        address: string
@@ -36,6 +37,7 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *        - name
  *        - lastname
  *        - email
+ *        - participantType
  *        - phone
  *        - cedula
  *        - address
@@ -49,6 +51,7 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *        lastname: "Perez Loor"
  *        phone: "0983334657"
  *        email: "luisjo3lml@gmail.com"
+ *        participantType: "medico_rural"
  *        cedula: "1312386962"
  *        address: "manta"
  *        company: "AbiDev"

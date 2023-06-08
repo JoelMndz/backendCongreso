@@ -4,7 +4,7 @@ import { joiMessages } from "./joiMessage";
 export const CourseValidation = {
   validateCreateCourse: Joi.object({
     title: Joi.string().required(),
-    description: Joi.string(),
+    description: Joi.optional(),
     photoBase64: Joi.string()
       .custom((value, helpers) => {
         if (
@@ -17,7 +17,7 @@ export const CourseValidation = {
         return value;
       })
       .required(),
-    price: Joi.number().required(),
+    price: Joi.optional(),
     type: Joi.string()
       .valid(...["workshop", "congress"])
       .required(),
@@ -38,17 +38,17 @@ export const CourseValidation = {
 
   validateUpdateCourse: Joi.object({
     title: Joi.string(),
-    description: Joi.string(),
+    description: Joi.optional(),
     photoBase64: Joi.string().custom((value, helpers) => {
       if (
         !new RegExp(
           /^data:([a-z]+\/[a-z]+);base64,([a-zA-Z0-9+/]+={0,2})$/
         ).test(value)
       ) {
-        return helpers.error("string.custom.validarBase64");
+        return helpers.error("string.custom.validateBase64");
       }
       return value;
-    }),
+    }).optional(),
     price: Joi.number(),
     type: Joi.string().valid(...["workshop", "congress"]),
     startDate: Joi.date(),
@@ -59,9 +59,9 @@ export const CourseValidation = {
           /^data:([a-z]+\/[a-z]+);base64,([a-zA-Z0-9+/]+={0,2})$/
         ).test(value)
       ) {
-        return helpers.error("string.custom.validarBase64");
+        return helpers.error("string.custom.validateBase64");
       }
       return value;
-    }),
+    }).optional(),
   }).messages(joiMessages),
 };
