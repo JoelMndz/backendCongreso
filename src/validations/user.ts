@@ -11,7 +11,6 @@ export const UserValidation = {
     participantType: Joi.string().required(),
     phone: Joi.string().required(),
     cedula: Joi.string()
-      .min(10)
       .required(),
     address: Joi.string(),
     company: Joi.string(),
