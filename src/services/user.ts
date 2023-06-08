@@ -11,7 +11,7 @@ interface IRegisterParticipant{
   name: string,
   lastname: string,
   email: string,
-  particypantType: string,
+  participantType: string,
   phone: string,
   cedula: string,
   address: string,
@@ -61,7 +61,7 @@ export const UserService = {
       company: entity.company.toLocaleLowerCase(),
       password: entity.password,
       role: ROLES.PARTICIPANT,
-      particypantType: entity.particypantType
+      participantType: entity.participantType
     })
 
     let total = 0;
@@ -70,7 +70,7 @@ export const UserService = {
       const course = await CourseModel.findById(entity.inscriptions[i]);
       if(!course) throw new Error(`El id ${entity.inscriptions[i]} no le pertenece a ningún curso`);
       if(course.type === TYPE_COURSE.CONGRESS){
-        switch(entity.particypantType){
+        switch(entity.participantType){
           case TYPE_PRICE_CONGRESS.estudiante:{
             total += course.congressPrice!["estudiante"]!
             break;

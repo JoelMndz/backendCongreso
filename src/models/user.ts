@@ -6,7 +6,7 @@ const userSchema = new Schema({
   name: String,
   lastname: String,
   email: String,
-  particypantType:{
+  participantType:{
     type: String,
     enum: [
       TYPE_PRICE_CONGRESS.medico_general, 
