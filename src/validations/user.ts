@@ -8,6 +8,7 @@ export const UserValidation = {
     name: Joi.string().required(),
     lastname: Joi.string().required(),
     email: Joi.string().email().required(),
+    particypantType: Joi.string().required(),
     phone: Joi.string().required(),
     cedula: Joi.string()
       .min(10)

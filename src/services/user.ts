@@ -1,7 +1,7 @@
 import {Types} from "mongoose"
 import qrcode from 'qrcode'
 
-import { METHOD_PAYMENT, ROLES, STATUS_REGISTER } from "../constants"
+import { METHOD_PAYMENT, ROLES, STATUS_REGISTER, TYPE_COURSE, TYPE_PRICE_CONGRESS } from "../constants"
 import { encryptText, generateToken,uploadCloudinary } from "../utils"
 import { UserValidation } from "../validations"
 import {RegisterModel, CourseModel, UserModel} from '../models'
@@ -11,6 +11,7 @@ interface IRegisterParticipant{
   name: string,
   lastname: string,
   email: string,
+  particypantType: string,
   phone: string,
   cedula: string,
   address: string,
@@ -60,6 +61,7 @@ export const UserService = {
       company: entity.company.toLocaleLowerCase(),
       password: entity.password,
       role: ROLES.PARTICIPANT,
+      particypantType: entity.particypantType
     })
 
     let total = 0;
@@ -67,7 +69,37 @@ export const UserService = {
     for (let i = 0; i < entity.inscriptions.length; i++) {
       const course = await CourseModel.findById(entity.inscriptions[i]);
       if(!course) throw new Error(`El id ${entity.inscriptions[i]} no le pertenece a ningún curso`);
-      total += course.price!
+      if(course.type === TYPE_COURSE.CONGRESS){
+        switch(entity.particypantType){
+          case TYPE_PRICE_CONGRESS.estudiante:{
+            total += course.congressPrice!["estudiante"]!
+            break;
+          }
+          case TYPE_PRICE_CONGRESS.medico_general:{
+            total += course.congressPrice!["medico_general"]!
+            break;
+          }
+          case TYPE_PRICE_CONGRESS.medico_rural:{
+            total += course.congressPrice!["medico_rural"]!
+            break;
+          }
+          case TYPE_PRICE_CONGRESS.medico_especialista:{
+            total += course.congressPrice!["medico_especialista"]!
+            break;
+          }
+          case TYPE_PRICE_CONGRESS.profesional_salud:{
+            total += course.congressPrice!["profesional_salud"]!
+            break;
+          }
+          case TYPE_PRICE_CONGRESS.ponencia_congreso_memorias:{
+            total += course.congressPrice!["ponencia_congreso_memorias"]!
+            break;
+          }
+        };
+        
+      }else{
+        total += course.price!
+      }
       inscriptions.push({ courseId: new Types.ObjectId(entity.inscriptions[i]) })
     }
 

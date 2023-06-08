@@ -23,17 +23,39 @@ export const CourseService = {
     if(entity.certificateTemplateBase64){
       certificateTemplateURL = await uploadCloudinary (entity.certificateTemplateBase64);
     }
-    const newCourse = await CourseModel.create({
+
+    if(entity.type === 'congress'){
+      return await CourseModel.create({
+        title: entity.title,
+        description: entity.description ?? null,
+        photoURL: photoURL,
+        congressPrice:{
+          medico_especialista: 150,
+          medico_general: 100,
+          medico_rural: 100,
+          profesional_salud: 100,
+          estudiante: 50,
+          ponencia_congreso_memorias: 150
+        },
+        type: entity.type,
+        startDate: entity.startDate,
+        endDate: entity.endDate,
+        certificateTemplateURL: certificateTemplateURL
+      });
+    }
+    
+    return await CourseModel.create({
       title: entity.title,
       description: entity.description,
       photoURL: photoURL,
       price: entity.price,
+      congressPrice: null,
       type: entity.type,
       startDate: entity.startDate,
       endDate: entity.endDate,
       certificateTemplateURL: certificateTemplateURL
     });
-    return newCourse;
+    
   },
 
   getAllCourses: async () => {
