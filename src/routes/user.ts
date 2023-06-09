@@ -11,6 +11,7 @@ RouterUser.get('/login-with-token', verificarToken, UserController.loginWithToke
 RouterUser.get('/get-all-registers', allowAdiministrator, UserController.getAllRegisters)
 RouterUser.put('/update-status-register', allowAdiministrator, UserController.updateStatusRegister)
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
+RouterUser.post('/register-new-administrator', allowAdiministrator, UserController.registerNewAdministrator);
 
 /**
  * @swagger

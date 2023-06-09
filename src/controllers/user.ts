@@ -56,4 +56,13 @@ export const UserController = {
       handleError(res, error);
     }
   },
+
+  registerNewAdministrator: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.registerNewAdmin(req.body);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
 };

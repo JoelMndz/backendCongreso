@@ -2,7 +2,7 @@ import {Types} from "mongoose"
 import qrcode from 'qrcode'
 
 import { METHOD_PAYMENT, ROLES, STATUS_REGISTER, TYPE_COURSE, TYPE_PRICE_CONGRESS } from "../constants"
-import { encryptText, generateToken,uploadCloudinary } from "../utils"
+import { encryptText, generateToken,uploadCloudinary, enviarEmail, generatePassword } from "../utils"
 import { UserValidation } from "../validations"
 import {RegisterModel, CourseModel, UserModel} from '../models'
 
@@ -181,5 +181,54 @@ export const UserService = {
       password: entity.password,
       role: ROLES.ADMINISTRATOR,
     })
+  },
+
+  registerNewAdmin: async (entity: IRegisterAdmin) => {
+    const { error } = UserValidation.validateRegisterAdmin.validate(entity);
+    if (error) throw new Error(error.message);
+
+    const resultfindUserByEmail = await UserModel.findOne({
+      email: entity.email.toLocaleLowerCase(),
+    });
+    if (resultfindUserByEmail)
+      throw new Error("El email ya se encuentra registrado");
+
+    entity.password = generatePassword();
+
+    const encryptedPassword = await encryptText(entity.password);
+
+    const newAdmin = await UserModel.create({
+      name: entity.name.toLocaleLowerCase(),
+      lastname: entity.lastname.toLocaleLowerCase(),
+      email: entity.email.toLocaleLowerCase(),
+      phone: entity.phone,
+      cedula: entity.cedula,
+      address: entity.address.toLocaleLowerCase(),
+      company: entity.company.toLocaleLowerCase(),
+      password: encryptedPassword,
+      role: ROLES.ADMINISTRATOR,
+    });
+
+    const emailSubject = "Registro exitoso como administrador";
+    const emailMessage = `Hola ${newAdmin.name},
+  
+    Se ha creado una cuenta de administrador para ti en nuestra aplicación.
+    A continuación, se muestra tu contraseña de inicio de sesión:
+    Contraseña: ${entity.password}
+    
+    Puedes acceder a la aplicación utilizando tu dirección de correo electrónico y la contraseña proporcionada.
+    
+    Saludos,
+    El equipo de administración`;
+
+    if (newAdmin.email) {
+      await enviarEmail(newAdmin.email, emailSubject, emailMessage);
+    } else {
+      throw new Error(
+        "No se pudo enviar el correo electrónico al nuevo administrador"
+      );
+    }
+
+    return newAdmin;
   },
 }
