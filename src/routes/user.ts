@@ -284,3 +284,26 @@ RouterUser.post('/register-new-administrator', allowAdiministrator, UserControll
  *            schema:
  *              $ref: '#/components/schemas/Error'                  
  */
+
+/**
+ * @swagger
+ * /api/user/register-new-administrator:
+ *  post:
+ *    summary: Registro de nuevos administradores
+ *    tags: [Usuario]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/RequestRegisterNewAdministrator'    
+ *    responses:
+ *      200:
+ *        description: Devuelve el usuario ingresado con el id
+ *      400:
+ *        description: Devuelve un objeto de tipo Error  
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Error'                  
+ */

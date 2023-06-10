@@ -6,7 +6,6 @@ import { encryptText, generateToken,uploadCloudinary, enviarEmail, generatePassw
 import { UserValidation } from "../validations"
 import {RegisterModel, CourseModel, UserModel} from '../models'
 
-
 interface IRegisterParticipant{
   name: string,
   lastname: string,
@@ -184,7 +183,7 @@ export const UserService = {
   },
 
   registerNewAdmin: async (entity: IRegisterAdmin) => {
-    const { error } = UserValidation.validateRegisterAdmin.validate(entity);
+    const { error } = UserValidation.validateRegisterNewAdmin.validate(entity);
     if (error) throw new Error(error.message);
 
     const resultfindUserByEmail = await UserModel.findOne({
@@ -228,7 +227,6 @@ export const UserService = {
         "No se pudo enviar el correo electrónico al nuevo administrador"
       );
     }
-
     return newAdmin;
   },
 }
