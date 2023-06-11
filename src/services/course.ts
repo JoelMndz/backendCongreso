@@ -2,14 +2,14 @@ import { CourseModel } from "../models";
 import { CourseValidation } from "../validations";
 import { uploadCloudinary } from "../utils";
 interface ICreateCourse {
-  title: string,
-  description: string,
-  photoBase64: string,
-  price: number,
-  type: string,
-  startDate: Date,
-  endDate: Date,
-  certificateTemplateBase64: string
+  title: string;
+  description: string;
+  photoBase64: string;
+  price: number;
+  type: string;
+  startDate: Date;
+  endDate: Date;
+  certificateTemplateBase64: string;
 }
 
 export const CourseService = {
@@ -20,30 +20,32 @@ export const CourseService = {
     }
     const photoURL = await uploadCloudinary(entity.photoBase64);
     let certificateTemplateURL = null;
-    if(entity.certificateTemplateBase64){
-      certificateTemplateURL = await uploadCloudinary (entity.certificateTemplateBase64);
+    if (entity.certificateTemplateBase64) {
+      certificateTemplateURL = await uploadCloudinary(
+        entity.certificateTemplateBase64
+      );
     }
 
-    if(entity.type === 'congress'){
+    if (entity.type === "congress") {
       return await CourseModel.create({
         title: entity.title,
         description: entity.description ?? null,
         photoURL: photoURL,
-        congressPrice:{
+        congressPrice: {
           medico_especialista: 150,
           medico_general: 100,
           medico_rural: 100,
           profesional_salud: 100,
           estudiante: 50,
-          ponencia_congreso_memorias: 150
+          ponencia_congreso_memorias: 150,
         },
         type: entity.type,
         startDate: entity.startDate,
         endDate: entity.endDate,
-        certificateTemplateURL: certificateTemplateURL
+        certificateTemplateURL: certificateTemplateURL,
       });
     }
-    
+
     return await CourseModel.create({
       title: entity.title,
       description: entity.description,
@@ -53,9 +55,8 @@ export const CourseService = {
       type: entity.type,
       startDate: entity.startDate,
       endDate: entity.endDate,
-      certificateTemplateURL: certificateTemplateURL
+      certificateTemplateURL: certificateTemplateURL,
     });
-    
   },
 
   getAllCourses: async () => {
@@ -88,7 +89,22 @@ export const CourseService = {
     }
 
     if (updates.certificateTemplateBase64) {
-      queryUpdate.certificateTemplateURL = await uploadCloudinary(updates.certificateTemplateBase64);
+      queryUpdate.certificateTemplateURL = await uploadCloudinary(
+        updates.certificateTemplateBase64
+      );
+    }
+
+    if (updates.type === "congress") {
+      queryUpdate.congressPrice = {
+        medico_especialista: 150,
+        medico_general: 100,
+        medico_rural: 100,
+        profesional_salud: 100,
+        estudiante: 50,
+        ponencia_congreso_memorias: 150,
+      };
+    } else {
+      queryUpdate.$unset = { congressPrice: 1 };
     }
 
     const updatedCourse = await CourseModel.findByIdAndUpdate(id, queryUpdate);
