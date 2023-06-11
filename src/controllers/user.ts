@@ -57,9 +57,9 @@ export const UserController = {
     }
   },
 
-  registerNewAdministrator: async (req: Request, res: Response) => {
+  registerVerifier: async (req: Request, res: Response) => {
     try {
-      const data = await UserService.registerNewAdmin(req.body);
+      const data = await UserService.registerVerifier(req.body);
       return res.json(data);
     } catch (error: any) {
       handleError(res, error);

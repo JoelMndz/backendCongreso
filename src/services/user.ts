@@ -210,8 +210,8 @@ export const UserService = {
     });
   },
 
-  registerNewAdmin: async (entity: IRegisterAdmin) => {
-    const { error } = UserValidation.validateRegisterNewAdmin.validate(entity);
+  registerVerifier: async (entity: IRegisterAdmin) => {
+    const { error } = UserValidation.validateRegisterVerifier.validate(entity);
     if (error) throw new Error(error.message);
 
     const resultfindUserByEmail = await UserModel.findOne({
@@ -221,13 +221,15 @@ export const UserService = {
       throw new Error("El email ya se encuentra registrado");
 
     // Validar el rol enviado en el body
-    if (entity.role !== "administrator" && entity.role !== "verifier") {
-      throw new Error("El rol debe ser 'administrator' o 'verifier'");
+    if (entity.role !== "verifier") {
+      throw new Error("El rol debe ser 'verifier'");
     }
 
     entity.password = generatePassword();
 
     const encryptedPassword = await encryptText(entity.password);
+
+    const address = entity.address ? entity.address.toLocaleLowerCase() : null;
 
     const newAdmin = await UserModel.create({
       name: entity.name.toLocaleLowerCase(),
@@ -235,7 +237,7 @@ export const UserService = {
       email: entity.email.toLocaleLowerCase(),
       phone: entity.phone,
       cedula: entity.cedula,
-      address: entity.address.toLocaleLowerCase(),
+      address: address,
       company: entity.company.toLocaleLowerCase(),
       password: encryptedPassword,
       role: entity.role, 

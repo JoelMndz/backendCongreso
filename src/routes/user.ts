@@ -11,7 +11,7 @@ RouterUser.get('/login-with-token', verificarToken, UserController.loginWithToke
 RouterUser.get('/get-all-registers', allowAdiministrator, UserController.getAllRegisters)
 RouterUser.put('/update-status-register', allowAdiministrator, UserController.updateStatusRegister)
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
-RouterUser.post('/register-new-administrator', allowAdiministrator, UserController.registerNewAdministrator);
+RouterUser.post('/register-verifier', allowAdiministrator, UserController.registerVerifier);
 
 /**
  * @swagger
@@ -287,23 +287,23 @@ RouterUser.post('/register-new-administrator', allowAdiministrator, UserControll
 
 /**
  * @swagger
- * /api/user/register-new-administrator:
- *  post:
- *    summary: Registro de nuevos administradores
- *    tags: [Usuario]
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/RequestRegisterNewAdministrator'    
- *    responses:
- *      200:
- *        description: Devuelve el usuario ingresado con el id
- *      400:
- *        description: Devuelve un objeto de tipo Error  
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/Error'                  
+ * /api/user/register-verifier:
+ *   post:
+ *     summary: Registro de nuevos administradores
+ *     tags: [Usuario]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RequestRegisterVerifier'
+ *     responses:
+ *       200:
+ *         description: Devuelve el usuario ingresado con el ID
+ *       400:
+ *         description: Devuelve un objeto de tipo Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */

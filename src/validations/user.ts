@@ -72,7 +72,7 @@ export const UserValidation = {
   })
   .messages(joiMessages),
 
-  validateRegisterNewAdmin: Joi.object({
+  validateRegisterVerifier: Joi.object({
     name: Joi.string().required(),
     lastname: Joi.string().required(),
     email: Joi.string().email().required(),
