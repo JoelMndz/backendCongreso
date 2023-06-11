@@ -13,6 +13,7 @@ RouterUser.put('/update-status-register', allowAdiministrator, UserController.up
 RouterUser.put('/check-attendance', UserController.checkAttendance)
 RouterUser.put('/check-attendance-identity', UserController.checkAttendanceIdentity)
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
+RouterUser.get('get-all-registers-by-participant', verificarToken, UserController.getAllRegistersByParticipant)
 
 /**
  * @swagger
@@ -367,4 +368,28 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/ErrorAttendance'                  
+ */
+
+/**
+ * @swagger
+ * /api/user/get-all-registers-by-participant:
+ *  get:
+ *    summary: Obtener todos los registros del participante, es necesario el token del participante
+ *    tags: [Usuario]
+ *    parameters:
+ *      - in: header
+ *        name: token
+ *        description: Token de autenticación
+ *        required: true
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: Devuelve un array con los registros con la informacion de inscripciones, asitencias, certificados, curso
+ *      400:
+ *        description: Devuelve un objeto de tipo Error  
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Error'                  
  */

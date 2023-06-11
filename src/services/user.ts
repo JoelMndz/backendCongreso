@@ -253,5 +253,9 @@ export const UserService = {
       throw new Error('El usuario no se encuentra registrado en el curso!');
     }
     
-  }
+  },
+
+  async getAllRegistersByParticipant(participantId:string){
+    return await RegisterModel.find({userId:participantId}).populate('userId').populate('inscriptions.courseId')
+  },
 }

@@ -74,5 +74,14 @@ export const UserController = {
     } catch (error:any) {
       handleError(res,error)
     }
-  }
+  },
+
+  getAllRegistersByParticipant: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.getAllRegistersByParticipant(req.query.userId as string);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
 };
