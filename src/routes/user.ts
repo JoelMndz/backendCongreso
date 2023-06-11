@@ -10,6 +10,8 @@ RouterUser.post('/login', UserController.login);
 RouterUser.get('/login-with-token', verificarToken, UserController.loginWithToken)
 RouterUser.get('/get-all-registers', allowAdiministrator, UserController.getAllRegisters)
 RouterUser.put('/update-status-register', allowAdiministrator, UserController.updateStatusRegister)
+RouterUser.put('/check-attendance', UserController.checkAttendance)
+RouterUser.put('/check-attendance-identity', UserController.checkAttendanceIdentity)
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
 
 /**
@@ -92,6 +94,17 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *        message: 'El email ya está registrado!'
  *        errors: []
  *        status: 400
+*    ErrorAttendance:
+ *      type: Object
+ *      properties:
+ *        message:
+ *          type: string
+ *        status: 
+ *          type: number
+ *      example:
+ *        message: 'El usuario no se encuentra registrado en el curso!'
+ *        errors: []
+ *        status: 400
 
  *    RequestRegisterAdministrator:
  *      type: Object
@@ -122,6 +135,32 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *        address: "manta"
  *        company: "AbiDev"
  *        password: "12345678"
+ *    RequestCheckAttendance:
+ *      type: object
+ *      properties:
+ *        courseId:
+ *          type: string
+ *        userId:
+ *          type: string
+ *      required:
+ *        - courseId
+ *        - userId
+ *      example:
+ *        courseId: KuhiuHIUBibiuJIJbi
+ *        userId: KuhiuHIUBibiuJIJbi
+ *    RequestCheckAttendanceIdentity:
+ *      type: object
+ *      properties:
+ *        cedula:
+ *          type: string
+ *        userId:
+ *          type: string
+ *      required:
+ *        - cedula
+ *        - userId
+ *      example:
+ *        cedula: 1311460909
+ *        userId: KuhiuHIUBibiuJIJbi
  */
 
 /**
@@ -282,4 +321,50 @@ RouterUser.post('/register-administrator', UserController.registerAdministrator)
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/Error'                  
+ */
+
+/**
+ * @swagger
+ * /api/user/check-attendance:
+ *  put:
+ *    summary: Registro de Asistencia
+ *    tags: [Usuario]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/RequestCheckAttendance'   
+ *    responses:
+ *      200:
+ *        description: Devuelve el registro actualizado
+ *      400:
+ *        description: Devuelve un objeto de tipo Error  
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/ErrorAttendance'                  
+ */
+
+/**
+ * @swagger
+ * /api/user/check-attendance-identity:
+ *  put:
+ *    summary: Registro de Asistencia por cedula
+ *    tags: [Usuario]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/RequestCheckAttendanceIdentity'   
+ *    responses:
+ *      200:
+ *        description: Devuelve el registro actualizado
+ *      400:
+ *        description: Devuelve un objeto de tipo Error  
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/ErrorAttendance'                  
  */
