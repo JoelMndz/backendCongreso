@@ -13,7 +13,7 @@ RouterUser.put('/update-status-register', allowAdiministrator, UserController.up
 RouterUser.put('/check-attendance', UserController.checkAttendance)
 RouterUser.put('/check-attendance-identity', UserController.checkAttendanceIdentity)
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
-RouterUser.get('get-all-registers-by-participant', verificarToken, UserController.getAllRegistersByParticipant)
+RouterUser.get('/get-all-registers-by-participant', verificarToken, UserController.getAllRegistersByParticipant)
 
 /**
  * @swagger
