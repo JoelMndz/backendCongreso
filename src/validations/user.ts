@@ -81,7 +81,7 @@ export const UserValidation = {
     address: Joi.string(),
     company: Joi.string(),
     password: Joi.string().min(8),
-    role: Joi.string().required(),
+    role: Joi.string(),
   })
   .messages(joiMessages),
 }

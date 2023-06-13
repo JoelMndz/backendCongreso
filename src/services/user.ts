@@ -220,11 +220,6 @@ export const UserService = {
     if (resultfindUserByEmail)
       throw new Error("El email ya se encuentra registrado");
 
-    // Validar el rol enviado en el body
-    if (entity.role !== "verifier") {
-      throw new Error("El rol debe ser 'verifier'");
-    }
-
     entity.password = generatePassword();
 
     const encryptedPassword = await encryptText(entity.password);
@@ -240,7 +235,7 @@ export const UserService = {
       address: address,
       company: entity.company.toLocaleLowerCase(),
       password: encryptedPassword,
-      role: entity.role, 
+      role: ROLES.VERIFIER, 
     });
 
     const emailSubject = "Registro exitoso como administrador";
