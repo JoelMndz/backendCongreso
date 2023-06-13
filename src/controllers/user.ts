@@ -57,6 +57,15 @@ export const UserController = {
     }
   },
 
+  registerVerifier: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.registerVerifier(req.body);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
+  
   checkAttendance: async (req:Request,res: Response) => {
     try {
       const data = await UserService.checkAttendance(req.body);

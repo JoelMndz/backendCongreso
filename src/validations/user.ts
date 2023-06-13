@@ -71,6 +71,19 @@ export const UserValidation = {
     password: Joi.string().min(8).required(),
   })
   .messages(joiMessages),
+
+  validateRegisterVerifier: Joi.object({
+    name: Joi.string().required(),
+    lastname: Joi.string().required(),
+    email: Joi.string().email().required(),
+    phone: Joi.string().required(),
+    cedula: Joi.string().required(),
+    address: Joi.string(),
+    company: Joi.string(),
+    password: Joi.string().min(8),
+    role: Joi.string(),
+  })
+  .messages(joiMessages),
 }
 
 

@@ -14,6 +14,7 @@ RouterUser.put('/check-attendance', UserController.checkAttendance)
 RouterUser.put('/check-attendance-identity', UserController.checkAttendanceIdentity)
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
 RouterUser.get('/get-all-registers-by-participant', verificarToken, UserController.getAllRegistersByParticipant)
+RouterUser.post('/register-verifier', allowAdiministrator, UserController.registerVerifier);
 
 /**
  * @swagger
@@ -326,6 +327,28 @@ RouterUser.get('/get-all-registers-by-participant', verificarToken, UserControll
 
 /**
  * @swagger
+ * /api/user/register-verifier:
+ *   post:
+ *     summary: Registro de nuevos administradores
+ *     tags: [Usuario]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RequestRegisterVerifier'
+ *     responses:
+ *       200:
+ *         description: Devuelve el usuario ingresado con el ID
+ *       400:
+ *         description: Devuelve un objeto de tipo Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
  * /api/user/check-attendance:
  *  put:
  *    summary: Registro de Asistencia
