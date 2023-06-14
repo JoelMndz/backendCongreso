@@ -15,6 +15,7 @@ import {
   uploadCloudinary,
   enviarEmail,
   generatePassword,
+  generateRandomCode,
 } from "../utils";
 import { UserValidation } from "../validations";
 import { RegisterModel, CourseModel, UserModel } from "../models";
@@ -64,6 +65,10 @@ interface IcheckAttendance {
 interface ICheckAttendanceIdentity {
   cedula: string;
   courseId: string;
+}
+
+interface ICodeResetPassword {
+  email: string;
 }
 
 export const UserService = {
@@ -372,5 +377,27 @@ export const UserService = {
     return await RegisterModel.find({ userId: participantId })
       .populate("userId")
       .populate("inscriptions.courseId");
+  },
+
+  sendCodeChangePassword : async (entity: ICodeResetPassword) => {
+    const user = await UserModel.findOne({ email: entity.email.toLocaleLowerCase(), });
+    if (!user) throw new Error("El correo electrónico no está registrado");
+  
+    const code = generateRandomCode();
+  
+    user.codeChangePassword = code;
+    await user.save();
+  
+    const emailSubject = "Código de cambio de contraseña";
+    const emailMessage =
+      `Hola ${user.name},\n\n` +
+      `Aquí está tu código de cambio de contraseña: ${code}\n\n` +
+      `Utiliza este código para cambiar tu contraseña en nuestra aplicación.\n\n` +
+      `Saludos,\n` +
+      `El equipo de soporte`;
+  
+    if (user.email) {
+      await enviarEmail(user.email, emailSubject, emailMessage);
+    }
   },
 };

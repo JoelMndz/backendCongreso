@@ -27,7 +27,8 @@ const userSchema = new Schema({
   role:{
     type: String,
     enum: [ROLES.PARTICIPANT, ROLES.ADMINISTRATOR, ROLES.VERIFIER]
-  }
+  },
+  codeChangePassword: Number,
 });
 
 userSchema.methods.comparePasswords = async function(password:string){
