@@ -66,6 +66,15 @@ interface ICheckAttendanceIdentity {
   courseId: string;
 }
 
+interface IUpdateUser {
+  name: string;
+  lastname: string;
+  address: string;
+  company: string;
+  phone: string;
+  cedula: string;
+}
+
 export const UserService = {
   registerParticipant: async (entity: IRegisterParticipant) => {
     const { error } = UserValidation.validateCreateParticipant.validate(entity);
@@ -372,5 +381,48 @@ export const UserService = {
     return await RegisterModel.find({ userId: participantId })
       .populate("userId")
       .populate("inscriptions.courseId");
+  },
+
+  async updatetUser(id_user: string, entity: IUpdateUser){
+    const { error } = UserValidation.validateEditUser.validate(entity);
+    if (error) throw new Error(error.message);
+
+    const usuario = UserModel.findById({_id:id_user});
+    if(!usuario) throw new Error("Ocurrio un problema");
+    return await UserModel.findOneAndUpdate(
+      {
+        _id: id_user
+      },
+      { $set: {name:entity.name,
+              lastname:entity.lastname,
+              address:entity.address,
+              company: entity.company,
+              phone:entity.phone,
+              cedula:entity.cedula } 
+      },
+      { new: true }
+    );
+
+  },
+  async updateVerifierForAdmin(id_verifier: string, entity: IUpdateUser){
+    const { error } = UserValidation.validateEditUser.validate(entity);
+    if (error) throw new Error(error.message);
+
+    const usuario = UserModel.findById({_id:id_verifier});
+    if(!usuario) throw new Error("Ha ocurrio un problema");
+    return await UserModel.findOneAndUpdate(
+      {
+        _id: id_verifier
+      },
+      { $set: {name:entity.name,
+              lastname:entity.lastname,
+              address:entity.address,
+              company: entity.company,
+              phone:entity.phone,
+              cedula:entity.cedula } 
+      },
+      { new: true }
+    );
+
   },
 };

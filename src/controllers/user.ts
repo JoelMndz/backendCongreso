@@ -93,4 +93,20 @@ export const UserController = {
       handleError(res, error);
     }
   },
+  updatetUser:async (req:Request,res:Response)=>{
+    try {
+      const data = await UserService.updatetUser(req.query.id as string,req.body);
+      return res.json(data)
+    } catch (error:any) {
+      handleError(res, error);
+    }
+  },
+  updateVerifierForAdmin:async (req:Request,res:Response)=>{
+    try {
+      const data = await UserService.updateVerifierForAdmin(req.query.id as string,req.body);
+      return res.json(data)
+    } catch (error:any) {
+      handleError(res, error);
+    }
+  }
 };

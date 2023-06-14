@@ -15,6 +15,8 @@ RouterUser.put('/check-attendance-identity', UserController.checkAttendanceIdent
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
 RouterUser.get('/get-all-registers-by-participant', verificarToken, UserController.getAllRegistersByParticipant)
 RouterUser.post('/register-verifier', allowAdiministrator, UserController.registerVerifier);
+RouterUser.put('/update-user',  UserController.updatetUser)
+RouterUser.put('/update-user-verifier', allowAdiministrator, UserController.updateVerifierForAdmin)
 
 /**
  * @swagger
@@ -96,7 +98,7 @@ RouterUser.post('/register-verifier', allowAdiministrator, UserController.regist
  *        message: 'El email ya está registrado!'
  *        errors: []
  *        status: 400
-*    ErrorAttendance:
+ *    ErrorAttendance:
  *      type: Object
  *      properties:
  *        message:
@@ -105,6 +107,17 @@ RouterUser.post('/register-verifier', allowAdiministrator, UserController.regist
  *          type: number
  *      example:
  *        message: 'El usuario no se encuentra registrado en el curso!'
+ *        errors: []
+ *        status: 400
+ *    ErrorUpdate:
+ *      type: Object
+ *      properties:
+ *        message:
+ *          type: string
+ *        status: 
+ *          type: number
+ *      example:
+ *        message: 'No se puedo actualizar la informacion'
  *        errors: []
  *        status: 400
 
@@ -163,6 +176,52 @@ RouterUser.post('/register-verifier', allowAdiministrator, UserController.regist
  *      example:
  *        cedula: 1311460909
  *        userId: KuhiuHIUBibiuJIJbi
+ *    RequestUpdateUser:
+ *      type: object
+ *      properties:
+ *        name: string
+ *        lastname: string
+ *        address: string
+ *        company: string
+ *        phone: string
+ *        cedula: string
+ *      required:
+ *        - name
+ *        - lastname
+ *        - address
+ *        - company
+ *        - phone
+ *        - cedula
+ *      example:
+ *        name: "Dayanara Yamileth"
+ *        lastname: "Burgasi Rovayo"
+ *        address: "manta"
+ *        company: "Tecopesca"
+ *        phone: "0999232263"
+ *        cedula: "1311460909"
+ *    RequestUpdateUserVerifier:
+ *      type: object
+ *      properties:
+ *        name: string
+ *        lastname: string
+ *        address: string
+ *        company: string
+ *        phone: string
+ *        cedula: string
+ *      required:
+ *        - name
+ *        - lastname
+ *        - address
+ *        - company
+ *        - phone
+ *        - cedula
+ *      example:
+ *        name: "Dayanara Yamileth"
+ *        lastname: "Burgasi Rovayo"
+ *        address: "manta"
+ *        company: "Tecopesca"
+ *        phone: "0999232263"
+ *        cedula: "1311460909"
  */
 
 /**
@@ -349,6 +408,7 @@ RouterUser.post('/register-verifier', allowAdiministrator, UserController.regist
  */
 
 /**
+ * @swagger
  * /api/user/check-attendance:
  *  put:
  *    summary: Registro de Asistencia
@@ -415,4 +475,50 @@ RouterUser.post('/register-verifier', allowAdiministrator, UserController.regist
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/Error'                  
+ */
+
+/**
+ * @swagger
+ * /api/user/update-user:
+ *  put:
+ *    summary: Actualizacion de los datos por parte del usuario participante 
+ *    tags: [Usuario]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/RequestUpdateUser'   
+ *    responses:
+ *      200:
+ *        description: Devuelve el usuario actualizado 
+ *      400:
+ *        description: Devuelve un objeto de tipo Error  
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/ErrorUpdate'                  
+ */
+
+/**
+ * @swagger
+ * /api/user/update-user-verifier:
+ *  put:
+ *    summary: Actualizacion de los datos por parte del admin , es necesario el token del mismo
+ *    tags: [Usuario]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/RequestUpdateUserVerifier'   
+ *    responses:
+ *      200:
+ *        description: Devuelve el usuario verificador actualizado 
+ *      400:
+ *        description: Devuelve un objeto de tipo Error  
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/ErrorUpdate'                  
  */
