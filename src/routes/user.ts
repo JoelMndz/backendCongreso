@@ -15,6 +15,7 @@ RouterUser.put('/check-attendance-identity', UserController.checkAttendanceIdent
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
 RouterUser.get('/get-all-registers-by-participant', verificarToken, UserController.getAllRegistersByParticipant)
 RouterUser.post('/register-verifier', allowAdiministrator, UserController.registerVerifier);
+RouterUser.post('/send-code-change-password', UserController.sendCodeChangePassword);
 RouterUser.put('/update-user',  UserController.updatetUser)
 RouterUser.put('/update-user-verifier', allowAdiministrator, UserController.updateVerifierForAdmin)
 
@@ -477,6 +478,38 @@ RouterUser.put('/update-user-verifier', allowAdiministrator, UserController.upda
  *              $ref: '#/components/schemas/Error'                  
  */
 
+/**
+ * @swagger
+ * /api/user/send-code-change-password:
+ *   post:
+ *     summary: Send code to change password
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RequestSendCodeChangePassword'
+ *     responses:
+ *       '200':
+ *         description: Returns a Success object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Success'
+ *       '400':
+ *         description: Returns an Error object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       '404':
+ *         description: Returns an Error object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 /**
  * @swagger
  * /api/user/update-user:

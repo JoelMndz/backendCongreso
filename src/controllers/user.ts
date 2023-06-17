@@ -75,6 +75,7 @@ export const UserController = {
       handleError(res,error)
     }
   },
+  
   checkAttendanceIdentity: async (req:Request,res: Response) => {
     try {
       const data = await UserService.checkAttendanceIdentity(req.body);
@@ -109,4 +110,13 @@ export const UserController = {
       handleError(res, error);
     }
   }
+
+  sendCodeChangePassword: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.sendCodeChangePassword(req.body);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
 };
