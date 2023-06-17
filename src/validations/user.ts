@@ -84,6 +84,15 @@ export const UserValidation = {
     role: Joi.string(),
   })
   .messages(joiMessages),
+
+  validateEditUser: Joi.object({
+    name: Joi.string().required(),
+    lastname: Joi.string().required(),
+    address: Joi.string(),
+    company: Joi.string(),
+    phone: Joi.string().required(),
+    cedula: Joi.string().required()
+  }).messages(joiMessages)
 }
 
 
