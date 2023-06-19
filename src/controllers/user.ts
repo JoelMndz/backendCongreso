@@ -120,6 +120,15 @@ export const UserController = {
     }
   },
 
+  getRegisterById: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.getRegisterById(req.params.id as string);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
+
   changePassword: async (req: Request, res: Response) => {
     try {
       const data = await UserService.resetPassword(req.body);

@@ -207,7 +207,7 @@ export const UserService = {
     if (!updateRegister) throw new Error("El registroId no es inválido");
     updateRegister.status = entity.status;
     if (updateRegister.status === STATUS_REGISTER.PAID) {
-      const qr = await qrcode.toDataURL(updateRegister.userId?.toString()!);
+      const qr = await qrcode.toDataURL(updateRegister._id?.toString()!);
       updateRegister.qr = qr;
     }
 
@@ -464,6 +464,15 @@ export const UserService = {
     if (user.email) {
       await enviarEmail(user.email, emailSubject, emailMessage);
     }
+  },
+
+  async getRegisterById(id: string) {
+    const register =  await RegisterModel.findById(id)
+      .populate("userId")
+      .populate("inscriptions.courseId");
+    if(register)
+      return register
+    throw new Error("El id del registro no existe!")
   },
 
   resetPassword: async (entity: IResetPassword) => {
