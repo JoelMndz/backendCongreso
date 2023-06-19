@@ -15,9 +15,10 @@ RouterUser.put('/check-attendance-identity', UserController.checkAttendanceIdent
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
 RouterUser.get('/get-all-registers-by-participant', verificarToken, UserController.getAllRegistersByParticipant)
 RouterUser.post('/register-verifier', allowAdiministrator, UserController.registerVerifier);
-RouterUser.post('/send-code-change-password', UserController.sendCodeChangePassword);
+RouterUser.put('/send-code-change-password', UserController.sendCodeChangePassword);
 RouterUser.put('/update-user',  UserController.updatetUser)
 RouterUser.put('/update-user-verifier', allowAdiministrator, UserController.updateVerifierForAdmin)
+RouterUser.put('/change-password', UserController.changePassword)
 
 /**
  * @swagger
@@ -481,7 +482,7 @@ RouterUser.put('/update-user-verifier', allowAdiministrator, UserController.upda
 /**
  * @swagger
  * /api/user/send-code-change-password:
- *   post:
+ *   put:
  *     summary: Send code to change password
  *     tags: [User]
  *     requestBody:
@@ -554,4 +555,37 @@ RouterUser.put('/update-user-verifier', allowAdiministrator, UserController.upda
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/ErrorUpdate'                  
+ */
+
+/**
+ * @swagger
+ * /api/user/change-password:
+ *   put:
+ *     summary: Cambiar la contraseña del usuario
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RequestChangePassword'
+ *     responses:
+ *       '200':
+ *         description: Retorna un objeto Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Success'
+ *       '400':
+ *         description: Retorna un objeto Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       '404':
+ *         description: Retorna un objeto Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
