@@ -18,6 +18,7 @@ RouterUser.post('/register-verifier', allowAdiministrator, UserController.regist
 RouterUser.post('/send-code-change-password', UserController.sendCodeChangePassword);
 RouterUser.put('/update-user',  UserController.updatetUser)
 RouterUser.put('/update-user-verifier', allowAdiministrator, UserController.updateVerifierForAdmin)
+RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegisterById)
 
 /**
  * @swagger
@@ -554,4 +555,33 @@ RouterUser.put('/update-user-verifier', allowAdiministrator, UserController.upda
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/ErrorUpdate'                  
+ */
+
+/**
+ * @swagger
+ * /api/user/get-register-by-id/:id:
+ *  get:
+ *    summary: Obtener un registro por id
+ *    tags: [Usuario]
+ *    parameters:
+ *      - in: header
+ *        name: token
+ *        description: Token de autenticación
+ *        required: true
+ *        schema:
+ *          type: string
+ *      - in: param
+ *        name: id
+ *        description: El id del registro
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: Devuelve el registro
+ *      400:
+ *        description: Devuelve un objeto de tipo Error  
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Error'                  
  */
