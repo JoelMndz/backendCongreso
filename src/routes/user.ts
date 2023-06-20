@@ -17,6 +17,8 @@ RouterUser.get('/get-all-registers-by-participant', verificarToken, UserControll
 RouterUser.post('/register-verifier', allowAdiministrator, UserController.registerVerifier);
 RouterUser.put('/update-user', verificarToken, UserController.updatetUser)
 RouterUser.put('/update-user-verifier/:id', allowAdiministrator, UserController.updateVerifierForAdmin)
+RouterUser.post('/send-code-change-password', UserController.sendCodeChangePassword);
+RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegisterById)
 
 /**
  * @swagger
@@ -485,6 +487,38 @@ RouterUser.put('/update-user-verifier/:id', allowAdiministrator, UserController.
 
 /**
  * @swagger
+ * /api/user/send-code-change-password:
+ *   post:
+ *     summary: Send code to change password
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RequestSendCodeChangePassword'
+ *     responses:
+ *       '200':
+ *         description: Returns a Success object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Success'
+ *       '400':
+ *         description: Returns an Error object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       '404':
+ *         description: Returns an Error object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+/**
+ * @swagger
  * /api/user/update-user:
  *  put:
  *    summary: Actualizacion de los datos por parte del usuario participante 
@@ -547,4 +581,33 @@ RouterUser.put('/update-user-verifier/:id', allowAdiministrator, UserController.
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/ErrorUpdate'                  
+ */
+
+/**
+ * @swagger
+ * /api/user/get-register-by-id/:id:
+ *  get:
+ *    summary: Obtener un registro por id
+ *    tags: [Usuario]
+ *    parameters:
+ *      - in: header
+ *        name: token
+ *        description: Token de autenticación
+ *        required: true
+ *        schema:
+ *          type: string
+ *      - in: param
+ *        name: id
+ *        description: El id del registro
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: Devuelve el registro
+ *      400:
+ *        description: Devuelve un objeto de tipo Error  
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Error'                  
  */

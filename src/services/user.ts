@@ -15,6 +15,7 @@ import {
   uploadCloudinary,
   enviarEmail,
   generatePassword,
+  generateRandomCode,
 } from "../utils";
 import { UserValidation } from "../validations";
 import { RegisterModel, CourseModel, UserModel } from "../models";
@@ -74,6 +75,10 @@ interface IUpdateUser {
   company: string;
   phone: string;
   cedula: string;
+}
+
+interface ICodeResetPassword {
+  email: string;
 }
 
 export const UserService = {
@@ -197,7 +202,7 @@ export const UserService = {
     if (!updateRegister) throw new Error("El registroId no es inválido");
     updateRegister.status = entity.status;
     if (updateRegister.status === STATUS_REGISTER.PAID) {
-      const qr = await qrcode.toDataURL(updateRegister.userId?.toString()!);
+      const qr = await qrcode.toDataURL(updateRegister._id?.toString()!);
       updateRegister.qr = qr;
     }
 
@@ -427,5 +432,36 @@ export const UserService = {
       { new: true }
     );
 
+  },
+
+  sendCodeChangePassword : async (entity: ICodeResetPassword) => {
+    const user = await UserModel.findOne({ email: entity.email.toLocaleLowerCase(), });
+    if (!user) throw new Error("El correo electrónico no está registrado");
+  
+    const code = generateRandomCode();
+  
+    user.codeChangePassword = code;
+    await user.save();
+  
+    const emailSubject = "Código de cambio de contraseña";
+    const emailMessage =
+      `Hola ${user.name},\n\n` +
+      `Aquí está tu código de cambio de contraseña: ${code}\n\n` +
+      `Utiliza este código para cambiar tu contraseña en nuestra aplicación.\n\n` +
+      `Saludos,\n` +
+      `El equipo de soporte`;
+  
+    if (user.email) {
+      await enviarEmail(user.email, emailSubject, emailMessage);
+    }
+  },
+
+  async getRegisterById(id: string) {
+    const register =  await RegisterModel.findById(id)
+      .populate("userId")
+      .populate("inscriptions.courseId");
+    if(register)
+      return register
+    throw new Error("El id del registro no existe!")
   },
 };
