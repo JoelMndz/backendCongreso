@@ -15,9 +15,9 @@ RouterUser.put('/check-attendance-identity', UserController.checkAttendanceIdent
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
 RouterUser.get('/get-all-registers-by-participant', verificarToken, UserController.getAllRegistersByParticipant)
 RouterUser.post('/register-verifier', allowAdiministrator, UserController.registerVerifier);
+RouterUser.put('/update-user', verificarToken, UserController.updatetUser)
+RouterUser.put('/update-user-verifier/:id', allowAdiministrator, UserController.updateVerifierForAdmin)
 RouterUser.post('/send-code-change-password', UserController.sendCodeChangePassword);
-RouterUser.put('/update-user',  UserController.updatetUser)
-RouterUser.put('/update-user-verifier', allowAdiministrator, UserController.updateVerifierForAdmin)
 RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegisterById)
 
 /**
@@ -183,6 +183,7 @@ RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegi
  *      properties:
  *        name: string
  *        lastname: string
+ *        email: string
  *        address: string
  *        company: string
  *        phone: string
@@ -190,6 +191,7 @@ RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegi
  *      required:
  *        - name
  *        - lastname
+ *        - email
  *        - address
  *        - company
  *        - phone
@@ -197,6 +199,7 @@ RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegi
  *      example:
  *        name: "Dayanara Yamileth"
  *        lastname: "Burgasi Rovayo"
+ *        email: "dburgasi06@gmail.com"
  *        address: "manta"
  *        company: "Tecopesca"
  *        phone: "0999232263"
@@ -206,6 +209,7 @@ RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegi
  *      properties:
  *        name: string
  *        lastname: string
+ *        email: string
  *        address: string
  *        company: string
  *        phone: string
@@ -213,6 +217,7 @@ RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegi
  *      required:
  *        - name
  *        - lastname
+ *        - email
  *        - address
  *        - company
  *        - phone
@@ -220,6 +225,7 @@ RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegi
  *      example:
  *        name: "Dayanara Yamileth"
  *        lastname: "Burgasi Rovayo"
+ *        email: "dburgasi06@gmail.com"
  *        address: "manta"
  *        company: "Tecopesca"
  *        phone: "0999232263"
@@ -517,6 +523,13 @@ RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegi
  *  put:
  *    summary: Actualizacion de los datos por parte del usuario participante 
  *    tags: [Usuario]
+ *    parameters:
+ *      - in: header
+ *        name: token
+ *        description: Token de autenticación
+ *        required: true
+ *        schema:
+ *          type: string
  *    requestBody:
  *      required: true
  *      content:
@@ -536,10 +549,23 @@ RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegi
 
 /**
  * @swagger
- * /api/user/update-user-verifier:
+ * /api/user/update-user-verifier/{id}:
  *  put:
  *    summary: Actualizacion de los datos por parte del admin , es necesario el token del mismo
  *    tags: [Usuario]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: id del usuario
+ *        required: true
+ *        schema:
+ *          type: string
+ *      - in: header
+ *        name: token
+ *        description: Token de autenticación
+ *        required: true
+ *        schema:
+ *          type: string
  *    requestBody:
  *      required: true
  *      content:

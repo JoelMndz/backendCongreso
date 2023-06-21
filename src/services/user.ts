@@ -70,6 +70,7 @@ interface ICheckAttendanceIdentity {
 interface IUpdateUser {
   name: string;
   lastname: string;
+  email: string;
   address: string;
   company: string;
   phone: string;
@@ -400,6 +401,7 @@ export const UserService = {
       },
       { $set: {name:entity.name,
               lastname:entity.lastname,
+              email:entity.email,
               address:entity.address,
               company: entity.company,
               phone:entity.phone,
@@ -421,6 +423,7 @@ export const UserService = {
       },
       { $set: {name:entity.name,
               lastname:entity.lastname,
+              email:entity.email,
               address:entity.address,
               company: entity.company,
               phone:entity.phone,
