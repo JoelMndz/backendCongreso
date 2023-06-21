@@ -96,7 +96,7 @@ export const UserController = {
   },
   updatetUser:async (req:Request,res:Response)=>{
     try {
-      const data = await UserService.updatetUser(req.query.id as string,req.body);
+      const data = await UserService.updatetUser(req.query.userId as string,req.body);
       return res.json(data)
     } catch (error:any) {
       handleError(res, error);
@@ -104,7 +104,7 @@ export const UserController = {
   },
   updateVerifierForAdmin:async (req:Request,res:Response)=>{
     try {
-      const data = await UserService.updateVerifierForAdmin(req.query.id as string,req.body);
+      const data = await UserService.updateVerifierForAdmin(req.params.id as string, req.body);
       return res.json(data)
     } catch (error:any) {
       handleError(res, error);
