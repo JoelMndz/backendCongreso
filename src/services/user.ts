@@ -81,6 +81,12 @@ interface ICodeResetPassword {
   email: string;
 }
 
+interface IResetPassword {
+  email: string;
+  codeChangePassword: Number;
+  newPassword: string;
+}
+
 export const UserService = {
   registerParticipant: async (entity: IRegisterParticipant) => {
     const { error } = UserValidation.validateCreateParticipant.validate(entity);
@@ -389,60 +395,67 @@ export const UserService = {
       .populate("inscriptions.courseId");
   },
 
-  async updatetUser(id_user: string, entity: IUpdateUser){
+  async updatetUser(id_user: string, entity: IUpdateUser) {
     const { error } = UserValidation.validateEditUser.validate(entity);
     if (error) throw new Error(error.message);
 
-    const usuario = UserModel.findById({_id:id_user});
-    if(!usuario) throw new Error("Ocurrio un problema");
+    const usuario = UserModel.findById({ _id: id_user });
+    if (!usuario) throw new Error("Ocurrio un problema");
     return await UserModel.findOneAndUpdate(
       {
-        _id: id_user
+        _id: id_user,
       },
-      { $set: {name:entity.name,
-              lastname:entity.lastname,
+      {
+        $set: {
+          name: entity.name,
+          lastname: entity.lastname,
               email:entity.email,
-              address:entity.address,
-              company: entity.company,
-              phone:entity.phone,
-              cedula:entity.cedula } 
+          address: entity.address,
+          company: entity.company,
+          phone: entity.phone,
+          cedula: entity.cedula,
+        },
       },
       { new: true }
     );
-
   },
-  async updateVerifierForAdmin(id_verifier: string, entity: IUpdateUser){
+
+  async updateVerifierForAdmin(id_verifier: string, entity: IUpdateUser) {
     const { error } = UserValidation.validateEditUser.validate(entity);
     if (error) throw new Error(error.message);
 
-    const usuario = UserModel.findById({_id:id_verifier});
-    if(!usuario) throw new Error("Ha ocurrio un problema");
+    const usuario = UserModel.findById({ _id: id_verifier });
+    if (!usuario) throw new Error("Ha ocurrio un problema");
     return await UserModel.findOneAndUpdate(
       {
-        _id: id_verifier
+        _id: id_verifier,
       },
-      { $set: {name:entity.name,
-              lastname:entity.lastname,
+      {
+        $set: {
+          name: entity.name,
+          lastname: entity.lastname,
               email:entity.email,
-              address:entity.address,
-              company: entity.company,
-              phone:entity.phone,
-              cedula:entity.cedula } 
+          address: entity.address,
+          company: entity.company,
+          phone: entity.phone,
+          cedula: entity.cedula,
+        },
       },
       { new: true }
     );
-
   },
 
-  sendCodeChangePassword : async (entity: ICodeResetPassword) => {
-    const user = await UserModel.findOne({ email: entity.email.toLocaleLowerCase(), });
+  sendCodeChangePassword: async (entity: ICodeResetPassword) => {
+    const user = await UserModel.findOne({
+      email: entity.email.toLocaleLowerCase(),
+    });
     if (!user) throw new Error("El correo electrónico no está registrado");
-  
+
     const code = generateRandomCode();
-  
+
     user.codeChangePassword = code;
     await user.save();
-  
+
     const emailSubject = "Código de cambio de contraseña";
     const emailMessage =
       `Hola ${user.name},\n\n` +
@@ -450,7 +463,7 @@ export const UserService = {
       `Utiliza este código para cambiar tu contraseña en nuestra aplicación.\n\n` +
       `Saludos,\n` +
       `El equipo de soporte`;
-  
+
     if (user.email) {
       await enviarEmail(user.email, emailSubject, emailMessage);
     }
@@ -463,5 +476,39 @@ export const UserService = {
     if(register)
       return register
     throw new Error("El id del registro no existe!")
+  },
+
+  resetPassword: async (entity: IResetPassword) => {
+    const { email, codeChangePassword, newPassword } = entity;
+
+    const user = await UserModel.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      throw new Error("El correo electrónico no está registrado");
+    }
+
+    if (user.codeChangePassword !== codeChangePassword) {
+      throw new Error("El código de cambio de contraseña no es válido");
+    }
+    
+     // Validación de la nueva contraseña
+    const specialChars = "!@#$%^&*()_+~`|}{[]\\:;?><,./-=";
+    
+    if (
+      newPassword.length < 8 ||
+      !/[A-Z]/.test(newPassword) ||
+      !/[a-z]/.test(newPassword) ||
+      !/[0-9]/.test(newPassword) ||
+      !RegExp(
+        `[${specialChars.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")}]`
+      ).test(newPassword)
+    ) {
+      throw new Error("La nueva contraseña no cumple con los requisitos");
+    }
+
+    const encryptedPassword = await encryptText(entity.newPassword);
+
+    user.password = encryptedPassword;
+    user.codeChangePassword = undefined;
+    await user.save();
   },
 };

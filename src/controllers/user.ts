@@ -128,4 +128,13 @@ export const UserController = {
       handleError(res, error);
     }
   },
+
+  changePassword: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.resetPassword(req.body);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
 };

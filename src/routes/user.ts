@@ -17,8 +17,9 @@ RouterUser.get('/get-all-registers-by-participant', verificarToken, UserControll
 RouterUser.post('/register-verifier', allowAdiministrator, UserController.registerVerifier);
 RouterUser.put('/update-user', verificarToken, UserController.updatetUser)
 RouterUser.put('/update-user-verifier/:id', allowAdiministrator, UserController.updateVerifierForAdmin)
-RouterUser.post('/send-code-change-password', UserController.sendCodeChangePassword);
+RouterUser.put('/send-code-change-password', UserController.sendCodeChangePassword);
 RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegisterById)
+RouterUser.put('/change-password', UserController.changePassword)
 
 /**
  * @swagger
@@ -488,7 +489,7 @@ RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegi
 /**
  * @swagger
  * /api/user/send-code-change-password:
- *   post:
+ *   put:
  *     summary: Send code to change password
  *     tags: [User]
  *     requestBody:
@@ -610,4 +611,36 @@ RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegi
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/Error'                  
+ */
+/**
+ * @swagger
+ * /api/user/change-password:
+ *   put:
+ *     summary: Cambiar la contraseña del usuario
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RequestChangePassword'
+ *     responses:
+ *       '200':
+ *         description: Retorna un objeto Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Success'
+ *       '400':
+ *         description: Retorna un objeto Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       '404':
+ *         description: Retorna un objeto Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
