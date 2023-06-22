@@ -270,12 +270,12 @@ export const UserService = {
       role: ROLES.VERIFIER,
     });
 
-    const emailSubject = "Registro exitoso como administrador";
-    const emailMessage = `Hola ${newAdmin.name},
+    const emailMessage = "Bienvenido nuevo verificador!";
+    const emailSubject = `Hola ${newAdmin.name},
   
     Se ha creado una cuenta de administrador para ti en nuestra aplicación.
     A continuación, se muestra tu contraseña de inicio de sesión:
-    Contraseña: ${entity.password}
+    Contraseña: <b>${entity.password}</b>
     
     Puedes acceder a la aplicación utilizando tu dirección de correo electrónico y la contraseña proporcionada.
     
@@ -445,30 +445,6 @@ export const UserService = {
     );
   },
 
-  sendCodeChangePassword: async (entity: ICodeResetPassword) => {
-    const user = await UserModel.findOne({
-      email: entity.email.toLocaleLowerCase(),
-    });
-    if (!user) throw new Error("El correo electrónico no está registrado");
-
-    const code = generateRandomCode();
-
-    user.codeChangePassword = code;
-    await user.save();
-
-    const emailSubject = "Código de cambio de contraseña";
-    const emailMessage =
-      `Hola ${user.name},\n\n` +
-      `Aquí está tu código de cambio de contraseña: ${code}\n\n` +
-      `Utiliza este código para cambiar tu contraseña en nuestra aplicación.\n\n` +
-      `Saludos,\n` +
-      `El equipo de soporte`;
-
-    if (user.email) {
-      await enviarEmail(user.email, emailSubject, emailMessage);
-    }
-  },
-
   async getRegisterById(id: string) {
     const register =  await RegisterModel.findById(id)
       .populate("userId")
@@ -478,6 +454,32 @@ export const UserService = {
     throw new Error("El id del registro no existe!")
   },
 
+  sendCodeChangePassword: async (entity: ICodeResetPassword) => {
+    const user = await UserModel.findOne({
+      email: entity.email.toLocaleLowerCase(),
+    });
+    if (!user) throw new Error("El correo electrónico no está registrado");
+  
+    const code = generateRandomCode();
+  
+    user.codeChangePassword = code;
+    await user.save();
+  
+    const emailMessage = "Código de cambio de contraseña";
+    const emailSubject =
+      `Hola ${user.name},\n\n` +
+      `Aquí está tu código de cambio de contraseña:\n\n` +
+      `<b>${code}</b>\n\n` +
+      `Utiliza este código para cambiar tu contraseña en nuestra aplicación.\n\n` +
+      `Saludos,\n` +
+      `El equipo de soporte`;
+
+  
+    if (user.email) {
+      await enviarEmail(user.email, emailSubject, emailMessage);
+    }
+  },
+  
   resetPassword: async (entity: IResetPassword) => {
     const { email, codeChangePassword, newPassword } = entity;
 
