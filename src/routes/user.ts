@@ -486,38 +486,7 @@ RouterUser.put('/change-password', UserController.changePassword)
  *              $ref: '#/components/schemas/Error'                  
  */
 
-/**
- * @swagger
- * /api/user/send-code-change-password:
- *   put:
- *     summary: Send code to change password
- *     tags: [User]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/RequestSendCodeChangePassword'
- *     responses:
- *       '200':
- *         description: Returns a Success object
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Success'
- *       '400':
- *         description: Returns an Error object
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       '404':
- *         description: Returns an Error object
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
+
 /**
  * @swagger
  * /api/user/update-user:
@@ -612,12 +581,130 @@ RouterUser.put('/change-password', UserController.changePassword)
  *            schema:
  *              $ref: '#/components/schemas/Error'                  
  */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     RequestSendCodeChangePassword:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *       required:
+ *         - email
+ *       example:
+ *         email: example@gmail.com
+ * 
+ *     ErrorSendCodeChangePassword:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *         status:
+ *           type: number
+ *       example:
+ *         message: 'No se pudo enviar el código de verificación'
+ *         status: 400
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Usuario
+ *     description: Endpoints para la actualización de contraseña
+ */
+
+/**
+ * @swagger
+ * /api/user/send-code-change-password:
+ *   put:
+ *     summary: Envia código para cambiar la contraseña
+ *     tags:
+ *       - Usuario
+ *     parameters:
+ *       - in: header
+ *         name: token
+ *         description: Token de autenticación
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RequestSendCodeChangePassword'
+ *     responses:
+ *       '200':
+ *         description: Devuelve un objeto de tipo Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RequestSendCodeChangePassword'
+ *       '400':
+ *         description: Devuelve un objeto de tipo Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorSendCodeChangePassword'
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     RequestChangePassword:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *         codeChangePassword:
+ *           type: number
+ *         newPassword:
+ *           type: string
+ *       required:
+ *         - email
+ *         - codeChangePassword
+ *         - newPassword
+ *       example:
+ *         email: example@gmail.com
+ *         codeChangePassword: 656397
+ *         newPassword: Password123@!
+ * 
+ *     ErrorChangePassword:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *         status:
+ *           type: number
+ *       example:
+ *         message: 'No se pudo cambiar la contraseña'
+ *         status: 400
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Usuario
+ *     description: Endpoints para la actualización de contraseña
+ */
+
 /**
  * @swagger
  * /api/user/change-password:
  *   put:
- *     summary: Cambiar la contraseña del usuario
- *     tags: [User]
+ *     summary: Cambia la contraseña
+ *     tags:
+ *       - Usuario
+ *     parameters:
+ *       - in: header
+ *         name: token
+ *         description: Token de autenticación
+ *         required: true
+ *         schema:
+ *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -626,21 +713,15 @@ RouterUser.put('/change-password', UserController.changePassword)
  *             $ref: '#/components/schemas/RequestChangePassword'
  *     responses:
  *       '200':
- *         description: Retorna un objeto Success
+ *         description: Devuelve un objeto de tipo Success
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Success'
+ *               $ref: '#/components/schemas/RequestChangePassword'
  *       '400':
- *         description: Retorna un objeto Error
+ *         description: Devuelve un objeto de tipo Error
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
- *       '404':
- *         description: Retorna un objeto Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               $ref: '#/components/schemas/ErrorChangePassword'
  */
