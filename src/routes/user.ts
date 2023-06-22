@@ -395,25 +395,88 @@ RouterUser.put('/change-password', UserController.changePassword)
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     RequestVerifier:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         lastname:
+ *           type: number
+ *         email:
+ *          type: string
+ *         phone:
+ *          type: string
+ *         cedula:
+ *          type: string
+ *         address:
+ *          type: string
+ *         company:
+ *          type: string
+ *         password:
+ *          type: string
+ *         role:
+ *          type: string
+ *       required:
+ *         - name
+ *         - lastname
+ *         - email
+ *         - phone
+ *         - cedula
+ *         - company
+ *       example:
+ *         name: 'Tommy'
+ *         lastname: 'Verifier'
+ *         email: 'tomyrivera1021@gmail.com'
+ *         phone: '0960741444'
+ *         cedula: '1316556743'
+ *         address: 'manta'
+ *         company: 'TomDev'
+ * 
+ *     ErrorRegisterVerigier:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *         status:
+ *           type: number
+ *       example:
+ *         message: 'No se pudo registrar el usuario'
+ *         status: 400
+ */
+
+/**
+ * @swagger
  * /api/user/register-verifier:
  *   post:
- *     summary: Registro de nuevos administradores
- *     tags: [Usuario]
+ *     summary: Registro de nuevos verificadores
+ *     tags:
+ *       - Usuario
+ *     parameters:
+ *      - in: header
+ *        name: token
+ *        description: Token de autenticación
+ *        required: true
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/RequestRegisterVerifier'
+ *             $ref: '#/components/schemas/RequestVerifier'
  *     responses:
- *       200:
- *         description: Devuelve el usuario ingresado con el ID
- *       400:
+ *       '200':
+ *         description: Devuelve un objeto de tipo Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RequestVerifier'
+ *       '400':
  *         description: Devuelve un objeto de tipo Error
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               $ref: '#/components/schemas/ErrorRegisterVerigier'
  */
 
 /**
@@ -610,25 +673,11 @@ RouterUser.put('/change-password', UserController.changePassword)
 
 /**
  * @swagger
- * tags:
- *   - name: Usuario
- *     description: Endpoints para la actualización de contraseña
- */
-
-/**
- * @swagger
  * /api/user/send-code-change-password:
  *   put:
  *     summary: Envia código para cambiar la contraseña
  *     tags:
  *       - Usuario
- *     parameters:
- *       - in: header
- *         name: token
- *         description: Token de autenticación
- *         required: true
- *         schema:
- *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -686,25 +735,11 @@ RouterUser.put('/change-password', UserController.changePassword)
 
 /**
  * @swagger
- * tags:
- *   - name: Usuario
- *     description: Endpoints para la actualización de contraseña
- */
-
-/**
- * @swagger
  * /api/user/change-password:
  *   put:
  *     summary: Cambia la contraseña
  *     tags:
  *       - Usuario
- *     parameters:
- *       - in: header
- *         name: token
- *         description: Token de autenticación
- *         required: true
- *         schema:
- *           type: string
  *     requestBody:
  *       required: true
  *       content:
