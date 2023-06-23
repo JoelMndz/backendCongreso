@@ -2,6 +2,7 @@ import {Router} from 'express';
 import { UserController } from '../controllers';
 import { verificarToken } from '../middlewares';
 import { allowAdiministrator } from '../middlewares/alllowAdministrator';
+import { allowVerifierOrAdmin } from '../middlewares/allowVerifierOrAdmin';
 
 export const RouterUser = Router();
 
@@ -10,8 +11,8 @@ RouterUser.post('/login', UserController.login);
 RouterUser.get('/login-with-token', verificarToken, UserController.loginWithToken)
 RouterUser.get('/get-all-registers', allowAdiministrator, UserController.getAllRegisters)
 RouterUser.put('/update-status-register', allowAdiministrator, UserController.updateStatusRegister)
-RouterUser.put('/check-attendance', UserController.checkAttendance)
-RouterUser.put('/check-attendance-identity', UserController.checkAttendanceIdentity)
+RouterUser.put('/check-attendance',allowVerifierOrAdmin,  UserController.checkAttendance)
+RouterUser.put('/check-attendance-identity',allowVerifierOrAdmin, UserController.checkAttendanceIdentity)
 RouterUser.post('/register-administrator', UserController.registerAdministrator);
 RouterUser.get('/get-all-registers-by-participant', verificarToken, UserController.getAllRegistersByParticipant)
 RouterUser.post('/register-verifier', allowAdiministrator, UserController.registerVerifier);
@@ -156,29 +157,29 @@ RouterUser.put('/change-password', UserController.changePassword)
  *    RequestCheckAttendance:
  *      type: object
  *      properties:
- *        courseId:
+ *        registerId:
  *          type: string
- *        userId:
+ *        inscriptionId:
  *          type: string
  *      required:
- *        - courseId
- *        - userId
+ *        - registerId
+ *        - inscriptionId
  *      example:
- *        courseId: KuhiuHIUBibiuJIJbi
- *        userId: KuhiuHIUBibiuJIJbi
+ *        registerId: KuhiuHIUBibiuJIJbi
+ *        inscriptionId: KuhiuHIUBibiuJIJbi
  *    RequestCheckAttendanceIdentity:
  *      type: object
  *      properties:
  *        cedula:
  *          type: string
- *        userId:
+ *        courseId:
  *          type: string
  *      required:
  *        - cedula
- *        - userId
+ *        - courseId
  *      example:
  *        cedula: 1311460909
- *        userId: KuhiuHIUBibiuJIJbi
+ *        courseId: KuhiuHIUBibiuJIJbi
  *    RequestUpdateUser:
  *      type: object
  *      properties:
@@ -483,8 +484,15 @@ RouterUser.put('/change-password', UserController.changePassword)
  * @swagger
  * /api/user/check-attendance:
  *  put:
- *    summary: Registro de Asistencia
+ *    summary: Registro de Asistencia , es necesario el token (Autorizado para Verificador y Administrador)
  *    tags: [Usuario]
+ *    parameters:
+ *      - in: header
+ *        name: token
+ *        description: Token de autenticación
+ *        required: true
+ *        schema:
+ *          type: string
  *    requestBody:
  *      required: true
  *      content:
@@ -506,8 +514,15 @@ RouterUser.put('/change-password', UserController.changePassword)
  * @swagger
  * /api/user/check-attendance-identity:
  *  put:
- *    summary: Registro de Asistencia por cedula
+ *    summary: Registro de Asistencia por cedula es necesario el token (Autorizado para Verificador y Administrador)
  *    tags: [Usuario]
+ *    parameters:
+ *      - in: header
+ *        name: token
+ *        description: Token de autenticación
+ *        required: true
+ *        schema:
+ *          type: string
  *    requestBody:
  *      required: true
  *      content:

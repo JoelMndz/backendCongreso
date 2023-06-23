@@ -58,8 +58,10 @@ interface IUpdateStatusRegister {
 }
 
 interface IcheckAttendance {
-  courseId: string;
-  userId: string;
+  // courseId: string;
+  // userId: string;
+  registerId: string;
+  inscriptionId:string
 }
 
 interface ICheckAttendanceIdentity {
@@ -293,50 +295,64 @@ export const UserService = {
   },
 
   checkAttendance: async (entity: IcheckAttendance) => {
-    const existeUsuario = await RegisterModel.findOne({
-      userId: entity.userId,
-      "inscriptions.courseId": entity.courseId,
+    const existeRegistro = await RegisterModel.findOne({
+      _id: entity.registerId,
+      "inscriptions._id": entity.inscriptionId       
     });
-    const course = await CourseModel.findOne({ _id: entity.courseId });
-    const now = Date.now();
-    const fechabusqueda: Moment = moment(now);
-    fechabusqueda.startOf("day");
-    const fechaDate: Date = fechabusqueda.toDate();
-    const fechaExistente = await RegisterModel.findOne({
-      userId: entity.userId,
-      "inscriptions.courseId": entity.courseId,
-      "inscriptions.attendanceDate": fechaDate,
-    });
-
-    if (existeUsuario && existeUsuario?.status == "paid") {
-      if (course?.startDate && course?.endDate) {
-        if (
-          moment(fechaDate).isSameOrAfter(course.startDate) &&
-          moment(fechaDate).isSameOrBefore(course.endDate)
-        ) {
-          if (!fechaExistente) {
-            return await RegisterModel.findOneAndUpdate(
-              {
-                userId: entity.userId,
-                "inscriptions.courseId": entity.courseId,
-              },
-              { $push: { "inscriptions.$.attendanceDate": fechaDate } },
-              { new: true }
-            );
+    const inscription = await RegisterModel.findOne(
+      {
+        "inscriptions._id": entity.inscriptionId
+      },
+      {
+        "inscriptions.$": 1
+      }
+    );
+    if (existeRegistro && existeRegistro?.status == "paid") {
+      if(inscription){
+        const courseId = inscription.inscriptions[0].courseId;
+        const course = await CourseModel.findOne({ _id: courseId });
+        const now = Date.now();
+        const fechabusqueda: Moment = moment(now);
+        fechabusqueda.startOf("day");
+        const fechaDate: Date = fechabusqueda.toDate();
+        const fechaExistente = await RegisterModel.findOne({
+        _id: entity.registerId,
+        "inscriptions.courseId": courseId,
+        "inscriptions.attendanceDate": fechaDate,
+        });
+  
+        if (course?.startDate && course?.endDate) {
+          if (
+            moment(fechaDate).isSameOrAfter(course.startDate) &&
+            moment(fechaDate).isSameOrBefore(course.endDate)
+          ) {
+            if (!fechaExistente) {
+              return await RegisterModel.findOneAndUpdate(
+                {
+                  _id: entity.registerId,
+                  "inscriptions._id": entity.inscriptionId,
+                },
+                { $push: { "inscriptions.$.attendanceDate": fechaDate } },
+                { new: true }
+              );
+            } else {
+              throw new Error("!Ya se encuentra registrada la asistencia!");
+            }
           } else {
-            throw new Error("!Ya se encuntra registrada la asistencia!");
+            throw new Error(
+              `Inicio :${course.startDate} - Fin: ${course.endDate} del curso, no se pueden registrar asistencias`
+            );
           }
         } else {
-          throw new Error(
-            `Inicio :${course.startDate} - Fin: ${course.endDate} del curso, no se pueden registrar asistencias`
-          );
+          throw new Error("Ha ocurrido un error");
         }
       } else {
-        throw new Error("Ha ocurrido un error");
+        throw new Error("!La inscripcion  no fue encontrado!");
       }
-    } else {
-      throw new Error("!El usuario no se encuentra registrado en el curso!");
+    }else {
+      throw new Error("!El registro no fue encontrado!");
     }
+    
   },
 
   checkAttendanceIdentity: async (entity: ICheckAttendanceIdentity) => {
