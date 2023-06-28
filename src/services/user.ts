@@ -219,12 +219,19 @@ export const UserService = {
     const { error } =
       UserValidation.validateUpdateStatusRegister.validate(entity);
     if (error) throw new Error(error.message);
-    let updateRegister = await RegisterModel.findById(entity.registerId);
+    let updateRegister:any = await RegisterModel.findById(entity.registerId).populate('userId');
     if (!updateRegister) throw new Error("El registroId no es inválido");
     updateRegister.status = entity.status;
     if (updateRegister.status === STATUS_REGISTER.PAID) {
       const qr = await qrcode.toDataURL(updateRegister._id?.toString()!);
       updateRegister.qr = qr;
+      const emailSubject = "QR Congreso";
+      const emailMessage =
+        `<h6>Est QR le sirve para marcar su asistencia en el congreso</h6><br><img src="${qr}" alt="qr">`;
+    
+      if (updateRegister?.userId?.email as string) {
+        await enviarEmail(updateRegister?.userId?.email, emailSubject, emailMessage);
+      }
     }
 
     return await updateRegister?.save();
