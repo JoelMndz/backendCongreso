@@ -7,6 +7,7 @@ import { allowVerifierOrAdmin } from '../middlewares/allowVerifierOrAdmin';
 export const RouterUser = Router();
 
 RouterUser.post('/register-participant', UserController.registerParticipant);
+RouterUser.post('/register-participant-json', UserController.registerParticipantJSON);
 RouterUser.post('/login', UserController.login);
 RouterUser.get('/login-with-token', verificarToken, UserController.loginWithToken)
 RouterUser.get('/get-all-registers', allowAdiministrator, UserController.getAllRegisters)
@@ -264,6 +265,28 @@ RouterUser.get('/get-all-users', allowAdiministrator, UserController.getAllUsers
  *              $ref: '#/components/schemas/Error'                  
  */
 
+/**
+ * @swagger
+ * /api/user/register-participant-json:
+ *  post:
+ *    summary: Registro masivo
+ *    tags: [Usuario]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: array
+ *    responses:
+ *      200:
+ *        description: Devuelve el usuario ingresado con el id
+ *      400:
+ *        description: Devuelve un objeto de tipo Error  
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Error'                  
+ */
 
 /**
  * @swagger

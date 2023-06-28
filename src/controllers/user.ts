@@ -12,6 +12,15 @@ export const UserController = {
     }
   },
 
+  registerParticipantJSON: async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.registerParticipantsJSON(req.body);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
+
   login: async (req: Request, res: Response) => {
     try {
       const data = await UserService.login(req.body);

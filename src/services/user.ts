@@ -35,6 +35,19 @@ interface IRegisterParticipant {
   voucherBase64: string;
 }
 
+interface IRegisterJSON{
+  name: string;
+  lastname: string;
+  email: string;
+  participantType: string;
+  phone: string;
+  cedula: string;
+  address: string;
+  company: string;
+  inscriptionId: string;
+  status: string;
+}
+
 interface IRegisterAdmin {
   name: string;
   lastname: string;
@@ -532,5 +545,96 @@ export const UserService = {
 
   getAllUsers:async ()=>{
     return await UserModel.find();
+  },
+
+  registerParticipantsJSON: async(data:IRegisterJSON[])=>{
+    const reject:any[] = [];
+    const succesfull:any[] = [];
+
+    for (let i = 0; i < data.length; i++) {
+      try {
+        let entity = data[i];
+        const resultfindUserByEmail = await UserModel.findOne({
+          email: entity.email.toLocaleLowerCase(),
+        });     
+        if (resultfindUserByEmail)
+          throw new Error("El email ya se encuentra registrado");
+        
+        if (resultfindUserByEmail)
+          throw new Error("El email ya se encuentra registrado");
+        const password = await encryptText("Cont2023001@");
+    
+        const newUser = new UserModel({
+          name: entity.name.toLocaleLowerCase(),
+          lastname: entity.lastname.toLocaleLowerCase(),
+          email: entity.email.toLocaleLowerCase(),
+          phone: entity.phone,
+          cedula: entity.cedula,
+          address: entity.address.toLocaleLowerCase(),
+          company: entity.company.toLocaleLowerCase(),
+          password: password,
+          role: ROLES.PARTICIPANT,
+          participantType: entity.participantType,
+        });
+        let total = 0;
+        const inscriptions: any[] = [];
+        const course = await CourseModel.findById(entity.inscriptionId);
+        if (!course)
+          throw new Error(
+            `El id ${entity.inscriptionId} no le pertenece a ningún curso`
+        );
+        if (course.type === TYPE_COURSE.CONGRESS) {
+          switch (entity.participantType) {
+            case TYPE_PRICE_CONGRESS.estudiante: {
+              total += course.congressPrice!["estudiante"]!;
+              break;
+            }
+            case TYPE_PRICE_CONGRESS.medico_general: {
+              total += course.congressPrice!["medico_general"]!;
+              break;
+            }
+            case TYPE_PRICE_CONGRESS.medico_rural: {
+              total += course.congressPrice!["medico_rural"]!;
+              break;
+            }
+            case TYPE_PRICE_CONGRESS.medico_especialista: {
+              total += course.congressPrice!["medico_especialista"]!;
+              break;
+            }
+            case TYPE_PRICE_CONGRESS.profesional_salud: {
+              total += course.congressPrice!["profesional_salud"]!;
+              break;
+            }
+            case TYPE_PRICE_CONGRESS.ponencia_congreso_memorias: {
+              total += course.congressPrice!["ponencia_congreso_memorias"]!;
+              break;
+            }
+          }
+        } else {
+          total += course.price!;
+        }
+        inscriptions.push({
+          courseId: new Types.ObjectId(entity.inscriptionId),
+        });
+
+        const newRegister = new RegisterModel({
+          typePayment: METHOD_PAYMENT.EFECTIVE,
+          userId: newUser._id,
+          voucherURL: null,
+          total,
+          inscriptions,
+        });
+    
+        await newUser.save();
+        await newRegister.save();
+        
+        succesfull.push(newUser);
+      } catch (error:any) {
+        reject.push({error:error.message ?? 'Ocurrio un error', user: data[i]})
+      }
+    }
+    
+
+    return {reject, succesfull}
   }
 };

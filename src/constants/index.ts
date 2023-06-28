@@ -18,7 +18,8 @@ export const TYPE_PRICE_CONGRESS = {
     medico_rural: "medico_rural",
     profesional_salud: "profesional_salud",
     estudiante: "estudiante",
-    ponencia_congreso_memorias: "ponencia_congreso_memorias"
+    ponencia_congreso_memorias: "ponencia_congreso_memorias",
+    laboratorio: "laboratorio"
 }
 export const TYPE_COURSE = {
     CONGRESS: "congress",
