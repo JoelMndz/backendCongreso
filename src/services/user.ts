@@ -529,4 +529,8 @@ export const UserService = {
     user.codeChangePassword = undefined;
     await user.save();
   },
+
+  getAllUsers:async ()=>{
+    return await UserModel.find();
+  }
 };

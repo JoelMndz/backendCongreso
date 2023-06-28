@@ -21,7 +21,7 @@ RouterUser.put('/update-user-verifier/:id', allowAdiministrator, UserController.
 RouterUser.put('/send-code-change-password', UserController.sendCodeChangePassword);
 RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegisterById)
 RouterUser.put('/change-password', UserController.changePassword)
-
+RouterUser.get('/get-all-users', allowAdiministrator, UserController.getAllUsers);
 /**
  * @swagger
  * components:
@@ -774,4 +774,28 @@ RouterUser.put('/change-password', UserController.changePassword)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorChangePassword'
+ */
+
+/**
+ * @swagger
+ * /api/user/get-all-users:
+ *  get:
+ *    summary: Obtener todos los usuarios
+ *    tags: [Usuario]
+ *    parameters:
+ *      - in: header
+ *        name: token
+ *        description: Token de autenticación
+ *        required: true
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: Devuelve un array con los usuarios
+ *      400:
+ *        description: Devuelve un objeto de tipo Error  
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Error'                  
  */

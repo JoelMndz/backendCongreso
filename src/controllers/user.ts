@@ -137,4 +137,14 @@ export const UserController = {
       handleError(res, error);
     }
   },
+
+  getAllUsers: async(req: Request, res: Response) => {
+    try {
+      const data = await UserService.getAllUsers();
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
+
 };
