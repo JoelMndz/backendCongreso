@@ -44,7 +44,7 @@ interface IRegisterJSON{
   cedula: string;
   address: string;
   company: string;
-  inscriptionId: string;
+  inscriptions: string;
   status: string;
 }
 
@@ -557,6 +557,7 @@ export const UserService = {
   registerParticipantsJSON: async(data:IRegisterJSON[])=>{
     const reject:any[] = [];
     const succesfull:any[] = [];
+    const courses = await CourseModel.find();
 
     for (let i = 0; i < data.length; i++) {
       try {
@@ -585,44 +586,47 @@ export const UserService = {
         });
         let total = 0;
         const inscriptions: any[] = [];
-        const course = await CourseModel.findById(entity.inscriptionId);
-        if (!course)
-          throw new Error(
-            `El id ${entity.inscriptionId} no le pertenece a ningún curso`
-        );
-        if (course.type === TYPE_COURSE.CONGRESS) {
-          switch (entity.participantType) {
-            case TYPE_PRICE_CONGRESS.estudiante: {
-              total += course.congressPrice!["estudiante"]!;
-              break;
+        const namesInscriptions:string[] = entity.inscriptions.split(',');
+        for (let i = 0; i < namesInscriptions.length; i++) {
+          const course = courses.find(x => x.description === namesInscriptions[i].trim())
+          if (course){
+            if (course.type === TYPE_COURSE.CONGRESS) {
+              switch (entity.participantType) {
+                case TYPE_PRICE_CONGRESS.estudiante: {
+                  total += course.congressPrice!["estudiante"]!;
+                  break;
+                }
+                case TYPE_PRICE_CONGRESS.medico_general: {
+                  total += course.congressPrice!["medico_general"]!;
+                  break;
+                }
+                case TYPE_PRICE_CONGRESS.medico_rural: {
+                  total += course.congressPrice!["medico_rural"]!;
+                  break;
+                }
+                case TYPE_PRICE_CONGRESS.medico_especialista: {
+                  total += course.congressPrice!["medico_especialista"]!;
+                  break;
+                }
+                case TYPE_PRICE_CONGRESS.profesional_salud: {
+                  total += course.congressPrice!["profesional_salud"]!;
+                  break;
+                }
+                case TYPE_PRICE_CONGRESS.ponencia_congreso_memorias: {
+                  total += course.congressPrice!["ponencia_congreso_memorias"]!;
+                  break;
+                }
+              }
+            } else {
+              total += course.price!;
             }
-            case TYPE_PRICE_CONGRESS.medico_general: {
-              total += course.congressPrice!["medico_general"]!;
-              break;
-            }
-            case TYPE_PRICE_CONGRESS.medico_rural: {
-              total += course.congressPrice!["medico_rural"]!;
-              break;
-            }
-            case TYPE_PRICE_CONGRESS.medico_especialista: {
-              total += course.congressPrice!["medico_especialista"]!;
-              break;
-            }
-            case TYPE_PRICE_CONGRESS.profesional_salud: {
-              total += course.congressPrice!["profesional_salud"]!;
-              break;
-            }
-            case TYPE_PRICE_CONGRESS.ponencia_congreso_memorias: {
-              total += course.congressPrice!["ponencia_congreso_memorias"]!;
-              break;
-            }
+            inscriptions.push({
+              courseId: new Types.ObjectId(course._id),
+            });
+
           }
-        } else {
-          total += course.price!;
+          
         }
-        inscriptions.push({
-          courseId: new Types.ObjectId(entity.inscriptionId),
-        });
 
         const newRegister = new RegisterModel({
           typePayment: METHOD_PAYMENT.EFECTIVE,
@@ -630,8 +634,15 @@ export const UserService = {
           voucherURL: null,
           total,
           inscriptions,
+          status: STATUS_REGISTER.PAID
         });
     
+        newRegister.qr = await qrcode.toDataURL(newRegister._id?.toString()!);
+        const emailSubject = "QR Congreso";
+        const emailMessage =
+          `<h6>Est QR le sirve para marcar su asistencia en el congreso</h6><br><img src="${newRegister.qr}" alt="qr">`;
+      
+        await enviarEmail(newUser?.email as string,emailMessage, emailSubject);
         await newUser.save();
         await newRegister.save();
         
