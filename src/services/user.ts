@@ -629,7 +629,7 @@ export const UserService = {
         });
     
         newRegister.qr = await qrcode.toDataURL(newRegister._id?.toString()!);
-        const emailSubject = "QR Congreso 2023";
+        const emailSubject = "Registro Congreso 2023 - QR";
         const emailMessage =
           `<h1>Ingnorar el QR anterior.</h1>
           <h2>Contraseña: <strong>Cont2023001@</strong></h2>
