@@ -329,7 +329,7 @@ export const UserService = {
         const fechabusqueda: Moment = moment(now);
         fechabusqueda.startOf("day");
         const fechaDate: Date = fechabusqueda.toDate();
-        const fechaExistente = inscription.attendanceDate.find(x => x === fechaDate)
+        const fechaExistente = inscription.attendanceDate.find(x => moment(x).format('DD/MM/YYYY') === moment(fechaDate).format('DD/MM/YYYY'))
   
         if (course?.startDate && course?.endDate) {
           if (
