@@ -32,7 +32,7 @@ export const generatePassword = (): string => {
     password += randomChar;
   }
 
-  return password;
+  return password+'@';
 };
 
 const getRandomChar = (charString: string): string => {
