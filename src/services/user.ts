@@ -317,30 +317,19 @@ export const UserService = {
 
   checkAttendance: async (entity: IcheckAttendance) => {
     const existeRegistro = await RegisterModel.findOne({
-      _id: entity.registerId,
-      "inscriptions._id": entity.inscriptionId       
+      _id: entity.registerId     
     });
-    const inscription = await RegisterModel.findOne(
-      {
-        "inscriptions._id": entity.inscriptionId
-      },
-      {
-        "inscriptions.$": 1
-      }
-    );
     if (existeRegistro && existeRegistro?.status == "paid") {
+      const inscription = existeRegistro.inscriptions.find((x:any) => x._id.toString() === entity.inscriptionId)
+      
       if(inscription){
-        const courseId = inscription.inscriptions[0].courseId;
+        const courseId = inscription.courseId;
         const course = await CourseModel.findOne({ _id: courseId });
         const now = Date.now();
         const fechabusqueda: Moment = moment(now);
         fechabusqueda.startOf("day");
         const fechaDate: Date = fechabusqueda.toDate();
-        const fechaExistente = await RegisterModel.findOne({
-        _id: entity.registerId,
-        "inscriptions.courseId": courseId,
-        "inscriptions.attendanceDate": fechaDate,
-        });
+        const fechaExistente = inscription.attendanceDate.find(x => x === fechaDate)
   
         if (course?.startDate && course?.endDate) {
           if (
@@ -361,7 +350,7 @@ export const UserService = {
             }
           } else {
             throw new Error(
-              `Inicio :${course.startDate} - Fin: ${course.endDate} del curso, no se pueden registrar asistencias`
+              `Inicio :${moment(course.startDate).format('DD/MM/YYYY')} - Fin: ${moment(course.endDate).format('DD/MM/YYYY')} del curso, no se pueden registrar asistencias`
             );
           }
         } else {

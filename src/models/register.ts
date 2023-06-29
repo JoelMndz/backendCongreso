@@ -15,7 +15,7 @@ const registerSchema = new Schema({
   inscriptions: [
     {
       attendanceDate:[{
-        type: [Date],
+        type: Date,
         default: []
       }],
       certificateURL: {
