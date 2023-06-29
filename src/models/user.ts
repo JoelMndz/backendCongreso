@@ -15,6 +15,7 @@ const userSchema = new Schema({
       TYPE_PRICE_CONGRESS.estudiante,
       TYPE_PRICE_CONGRESS.profesional_salud,
       TYPE_PRICE_CONGRESS.ponencia_congreso_memorias,
+      TYPE_PRICE_CONGRESS.laboratorio,
       null
     ],
     default: null

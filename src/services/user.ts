@@ -227,10 +227,10 @@ export const UserService = {
       updateRegister.qr = qr;
       const emailSubject = "QR Congreso";
       const emailMessage =
-        `<h6>Est QR le sirve para marcar su asistencia en el congreso</h6><br><img src="${qr}" alt="qr">`;
+        `<h6>Estr QR le sirve para marcar su asistencia en el congreso</h6><br><img src="${qr}" alt="qr">`;
     
       if (updateRegister?.userId?.email as string) {
-        await enviarEmail(updateRegister?.userId?.email, emailSubject, emailMessage);
+        await enviarEmail(updateRegister?.userId?.email, emailMessage, emailSubject);
       }
     }
 
@@ -640,7 +640,7 @@ export const UserService = {
         newRegister.qr = await qrcode.toDataURL(newRegister._id?.toString()!);
         const emailSubject = "QR Congreso";
         const emailMessage =
-          `<h6>Est QR le sirve para marcar su asistencia en el congreso</h6><br><img src="${newRegister.qr}" alt="qr">`;
+          `<h6>Este QR le sirve para marcar su asistencia en el congreso</h6><br><img src="${newRegister.qr}" alt="qr">`;
       
         await enviarEmail(newUser?.email as string,emailMessage, emailSubject);
         await newUser.save();
