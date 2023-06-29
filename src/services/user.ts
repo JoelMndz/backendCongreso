@@ -631,7 +631,9 @@ export const UserService = {
         newRegister.qr = await qrcode.toDataURL(newRegister._id?.toString()!);
         const emailSubject = "QR Congreso 2023";
         const emailMessage =
-          `<h6>Ingnorar el QR anterior. Este QR le sirve para marcar su asistencia en el congreso</h6><br><img src="${newRegister.qr}" alt="qr">`;
+          `<h1>Ingnorar el QR anterior.</h1>
+          <h2>Contraseña: <strong>Cont2023001@</strong></h2>
+          <h2>Este QR le sirve para marcar su asistencia en el congreso</h2><br><img src="${newRegister.qr}" alt="qr">`;
       
         await enviarEmail(newUser?.email as string,emailMessage, emailSubject);
         await newUser.save();
