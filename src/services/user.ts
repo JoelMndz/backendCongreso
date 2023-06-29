@@ -572,16 +572,17 @@ export const UserService = {
           company: entity.company.toLocaleLowerCase(),
           password: password,
           role: ROLES.PARTICIPANT,
-          participantType: entity.participantType,
+          participantType: entity.participantType.toLocaleLowerCase(),
         });
         let total = 0;
         const inscriptions: any[] = [];
         const namesInscriptions:string[] = entity.inscriptions.split(',');
+        
         for (let i = 0; i < namesInscriptions.length; i++) {
-          const course = courses.find(x => x.description === namesInscriptions[i].trim())
+          const course = courses.find(x => x.title === namesInscriptions[i].trim())
           if (course){
             if (course.type === TYPE_COURSE.CONGRESS) {
-              switch (entity.participantType) {
+              switch (entity.participantType.toLocaleLowerCase()) {
                 case TYPE_PRICE_CONGRESS.estudiante: {
                   total += course.congressPrice!["estudiante"]!;
                   break;
@@ -628,9 +629,9 @@ export const UserService = {
         });
     
         newRegister.qr = await qrcode.toDataURL(newRegister._id?.toString()!);
-        const emailSubject = "QR Congreso";
+        const emailSubject = "QR Congreso 2023";
         const emailMessage =
-          `<h6>Este QR le sirve para marcar su asistencia en el congreso</h6><br><img src="${newRegister.qr}" alt="qr">`;
+          `<h6>Ingnorar el QR anterior. Este QR le sirve para marcar su asistencia en el congreso</h6><br><img src="${newRegister.qr}" alt="qr">`;
       
         await enviarEmail(newUser?.email as string,emailMessage, emailSubject);
         await newUser.save();
