@@ -29,3 +29,18 @@ export const enviarEmail = async(para: string, mensaje: string, asunto: string)=
     return false;      
   }
 }
+
+export const enviarEmailConArchivo = async(para: string, mensaje: string, asunto: string, files:any[])=>{
+  try{
+    await transporte.sendMail({
+      from: `<${EMAIL_USER}>`,
+      to: para,
+      subject: asunto,
+      html: mensaje,
+      attachments:files
+    });
+    return true;
+  } catch (error) {
+    return false;      
+  }
+}

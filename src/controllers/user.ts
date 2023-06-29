@@ -156,4 +156,12 @@ export const UserController = {
     }
   },
 
+  sendEmailMasive: async(req: Request, res: Response) => {
+    try {
+      const data = await UserService.sendEmailMasive(req.body);
+      return res.json(data);
+    } catch (error: any) {
+      handleError(res, error);
+    }
+  },
 };

@@ -16,6 +16,7 @@ import {
   enviarEmail,
   generatePassword,
   generateRandomCode,
+  enviarEmailConArchivo,
 } from "../utils";
 import { UserValidation } from "../validations";
 import { RegisterModel, CourseModel, UserModel } from "../models";
@@ -654,5 +655,13 @@ export const UserService = {
     
 
     return {reject, succesfull}
+  },
+
+  sendEmailMasive: async (entity:{message:string, subject:string, files:any[]})=>{
+    const users = await UserModel.find()
+    for (let i = 0; i < users.length; i++) {
+      await enviarEmailConArchivo(users[i].email as string,entity.message, entity.subject, entity.files)
+    }
+    return users.map(x => x.email)
   }
 };

@@ -23,6 +23,7 @@ RouterUser.put('/send-code-change-password', UserController.sendCodeChangePasswo
 RouterUser.get('/get-register-by-id/:id', verificarToken, UserController.getRegisterById)
 RouterUser.put('/change-password', UserController.changePassword)
 RouterUser.get('/get-all-users', allowAdiministrator, UserController.getAllUsers);
+RouterUser.put('/send-email-masive', UserController.sendEmailMasive);
 /**
  * @swagger
  * components:
@@ -821,4 +822,32 @@ RouterUser.get('/get-all-users', allowAdiministrator, UserController.getAllUsers
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/Error'                  
+ */
+
+/**
+ * @swagger
+ * /api/user/send-email-masive:
+ *   put:
+ *     summary: Enviar email a todos los usuarios
+ *     tags:
+ *       - Usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       '200':
+ *         description: Devuelve un objeto
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RequestChangePassword'
+ *       '400':
+ *         description: Devuelve un objeto de tipo Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorChangePassword'
  */
